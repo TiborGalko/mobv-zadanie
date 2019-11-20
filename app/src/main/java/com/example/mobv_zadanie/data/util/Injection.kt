@@ -7,8 +7,8 @@ import com.example.mobv_zadanie.data.db.*
 
 object Injection {
     private fun provideCache(context: Context): LocalCache {
-        val database = ZadanieRoomDatabase.getInstance(context)
-        return LocalCache(database.appDao())
+        val database = ZadanieRoomDatabase.getInstance(context) // get instance of database. It is created if null
+        return LocalCache(database.appDao()) // use database to create LocalCache
     }
 
     fun provideDataRepository(context: Context): DataRepository {

@@ -3,6 +3,7 @@ package com.example.mobv_zadanie.data
 import androidx.lifecycle.LiveData
 import com.example.mobv_zadanie.data.db.LocalCache
 import com.example.mobv_zadanie.data.db.model.UserItem
+import com.example.mobv_zadanie.data.db.model.WifiRoomItem
 
 class DataRepository private constructor(private val cache: LocalCache) {
 
@@ -17,5 +18,7 @@ class DataRepository private constructor(private val cache: LocalCache) {
             }
     }
 
-    fun getLoaded() : LiveData<List<UserItem>> = cache.getLoaded()
+    fun getUsers() : LiveData<List<UserItem>> = cache.getUsers()
+    fun getWifiRooms() : LiveData<List<WifiRoomItem>> = cache.getWifiRooms()
+    suspend fun insertWifiRoom(wifiRoomItem: WifiRoomItem) = cache.insertWifiRoom(wifiRoomItem)
 }

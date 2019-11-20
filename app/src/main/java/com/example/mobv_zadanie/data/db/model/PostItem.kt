@@ -4,5 +4,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "posts")
-class PostItem(@PrimaryKey val id: String) {
+data class PostItem(var text: String) {
+
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
+    var poster: UserItem? = null
+
+
+    override fun toString(): String {
+        return "PostItem(id=$id, poster=$poster, text='$text')"
+    }
 }
