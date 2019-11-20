@@ -1,7 +1,8 @@
-package com.example.mobv_zadanie
+package com.example.mobv_zadanie.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.mobv_zadanie.R
 
 class MainActivity : AppCompatActivity() {
 
