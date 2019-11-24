@@ -21,14 +21,19 @@ interface CallAPI{
         private const val BASE_URL = "http://zadanie.mpage.sk/"
         const val api_key : String = "c95332ee022df8c953ce470261efc695ecf3e784"
 
+        var useAuthentication : Boolean = false
         val type : ListAPI
                 get() {
                     return create()
             }
 
+        fun setAuthentication(value: Boolean){
+            useAuthentication = value
+        }
 
         fun create(): ListAPI {
             Log.i("TAG_API", "creating API method")
+            /*
             val contentInterceptor : Interceptor = object : Interceptor{
                 override fun intercept(chain: Interceptor.Chain): Response {
                     val request = chain.request()
@@ -38,10 +43,8 @@ interface CallAPI{
                         .addHeader("Content-Type", "application/json")
                     return chain.proceed(request.build())
                 }
-
             }
-
-
+            */
 
             val gson = GsonBuilder().setLenient().create()
 
@@ -50,9 +53,7 @@ interface CallAPI{
 
             val client = OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-                .addInterceptor(contentInterceptor)
-                //.addInterceptor(AuthInterceptor())
-                //.authenticator(TokenAuthenticator())
+                .addInterceptor(AuthInterceptor())
                 .build()
 
             val retrofit = Retrofit.Builder()

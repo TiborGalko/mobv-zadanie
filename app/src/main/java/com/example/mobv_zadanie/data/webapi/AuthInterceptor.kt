@@ -1,7 +1,7 @@
 package com.example.mobv_zadanie.data.webapi
 
-import android.content.Context
 import android.util.Log
+import com.example.mobv_zadanie.data.webapi.CallAPI.Companion.useAuthentication
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -17,12 +17,12 @@ class AuthInterceptor() : Interceptor {
             .addHeader("Accept","application/json")
             .addHeader("Content-Type","application/json")
 
-        /*
-        if (chain.request().header("ZadanieApiAuth")?.compareTo("accept")==0) {
-            val accessToken = //get stored accessToken
-                request.addHeader("Authorization","Bearer $accessToken")
+        if (useAuthentication){
+            /*
+            //todo get token
+            request.addHeader("Authorization", token)
+            */
         }
-        */
 
         return chain.proceed(request.build())
     }
