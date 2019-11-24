@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 
 import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.webapi.CallAPI
@@ -38,28 +39,30 @@ class LoginFragment : Fragment() {
         val login = view.findViewById<EditText>(R.id.edit_login_name)
         val passwd = view.findViewById<EditText>(R.id.edit_login_passw)
 
-        btn_login.setOnClickListener { view ->
-            Log.i("TAG_API", "Login pressed, name:"+login.text.toString()+"   password:"+passwd.text.toString())
-
-            //todo change values
-
-            CallAPI.type.userRegister(UserRequest("a", "a", "c95332ee022df8c953ce470261efc695ecf3e784")).enqueue(object: Callback<UserResponse>{
-                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                    Log.i("TAG_API", "API call FAILED: "+t.message)
-                }
-
-                override fun onResponse(
-                    call: Call<UserResponse>,
-                    response: Response<UserResponse>
-                ) {
-                    Log.i("TAG_API", "API call SUCCESS")
-
-
-                }
-
-            })
-            //Call <UserRequest> call
+        btn_register.setOnClickListener { view ->
+            registerUser(login.text.toString(), passwd.text.toString())
         }
+    }
+
+    fun registerUser(name: String, password: String){
+        Log.i("TAG_API", "Login pressed, name:"+name+"   password:"+password)
+
+        CallAPI.type.userRegister(UserRequest(name, password, CallAPI.api_key)).enqueue(object: Callback<UserResponse>{
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                Log.i("TAG_API", "API call FAILED: "+t.message)
+            }
+
+            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                Log.i("TAG_API", "API response code: "+response.code())
+                if (response.code() == 200){
+                    Toast.makeText(activity, "Success! "+response.code(), Toast.LENGTH_LONG).show()
+                }
+                else {
+                    Toast.makeText(activity, "Oops, server code "+response.code(), Toast.LENGTH_LONG).show()
+                }
+            }
+
+        })
     }
 
 }
