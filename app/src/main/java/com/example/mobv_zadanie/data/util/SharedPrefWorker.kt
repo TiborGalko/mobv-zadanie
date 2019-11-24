@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 
+//class for easy retrieving current user uid, access and refresh tokens (no need to create DB table for 1 row)
 interface SharedPrefWorker {
 
     companion object {
@@ -29,8 +30,6 @@ interface SharedPrefWorker {
             val sharedPref: SharedPreferences = appContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
             //second parameter is default value if object not found
             return sharedPref!!.getString(toRetrieve, defaultValue)
-
-
         }
     }
 }

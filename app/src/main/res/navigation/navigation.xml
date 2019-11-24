@@ -15,5 +15,9 @@
         android:id="@+id/loginFragment"
         android:name="com.example.mobv_zadanie.ui.LoginFragment"
         android:label="fragment_wifi_rooms"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_wifiRoomsFragment"
+            app:destination="@id/wifiRoomsFragment" />
+    </fragment>
 </navigation>
