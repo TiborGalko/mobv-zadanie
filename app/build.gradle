@@ -79,4 +79,7 @@ dependencies {
 
     def version_recyclerview = "1.0.0"
     implementation "androidx.recyclerview:recyclerview:$version_recyclerview"
+
+    //LOTTIE animation gifs
+    implementation 'com.airbnb.android:lottie:2.8.0'
 }

@@ -18,6 +18,8 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_wifiRoomsFragment"
-            app:destination="@id/wifiRoomsFragment" />
+            app:destination="@id/wifiRoomsFragment"
+            />
+
     </fragment>
 </navigation>

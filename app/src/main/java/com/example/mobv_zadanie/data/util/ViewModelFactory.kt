@@ -14,18 +14,6 @@ class ViewModelFactory(private val repository: DataRepository) : ViewModelProvid
         } else if (modelClass.isAssignableFrom(WifiRoomsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return WifiRoomsViewModel(repository) as T
-        } else if (modelClass.isAssignableFrom(WifiRoomsViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return WifiRoomsViewModel(repository) as T
-        } else if (modelClass.isAssignableFrom(WifiRoomsViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return WifiRoomsViewModel(repository) as T
-        } else if (modelClass.isAssignableFrom(WifiRoomsViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return WifiRoomsViewModel(repository) as T
-        } else if (modelClass.isAssignableFrom(WifiRoomsViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return WifiRoomsViewModel(repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")
