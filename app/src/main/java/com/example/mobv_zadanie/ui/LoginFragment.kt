@@ -10,19 +10,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.airbnb.lottie.LottieAnimationView
 
 import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.data.webapi.CallAPI
-import com.example.mobv_zadanie.data.webapi.UserRefresh
 import com.example.mobv_zadanie.data.webapi.UserRequest
 import com.example.mobv_zadanie.data.webapi.UserResponse
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -56,11 +51,9 @@ class LoginFragment : Fragment() {
         loginContext = view.context
 
         btn_register.setOnClickListener { view ->
-            hideKeyboard()
             registerUser(edit_login_name.text.toString(), edit_login_passw.text.toString())
         }
         btn_login.setOnClickListener { view ->
-            hideKeyboard()
             loginUser(edit_login_name.text.toString(), edit_login_passw.text.toString())
         }
     }
@@ -71,20 +64,17 @@ class LoginFragment : Fragment() {
         CallAPI.setAuthentication(false)
         CallAPI.type.userRegister(UserRequest(name, password, CallAPI.api_key)).enqueue(object: Callback<UserResponse>{
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                Toast.makeText(activity, "Oops, something went wrong: "+t.message, Toast.LENGTH_LONG).show()
+                //Toast.makeText(activity, "Oops, something went wrong: "+t.message, Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 Log.i("TAG_API", "API response code: "+response.code())
 
-                val animationView1 = view?.findViewById(R.id.lottie_anim_login) as LottieAnimationView
-                animationView1.visibility = View.VISIBLE
+                hideKeyboard()
+                val animation = view?.findViewById(R.id.lottie_anim_login) as LottieAnimationView
+                animation.visibility = View.VISIBLE
 
                 if (response.code() == 200){
-
-                    //we want to see only animation, hide other UI components
-                    hideUIComponents(View.GONE)
-
                     //saving server response values into SharedPref
                     SharedPrefWorker.saveString(loginContext, "uid", response.body()!!.uid)
                     SharedPrefWorker.saveString(loginContext, "access", response.body()!!.access)
@@ -93,43 +83,10 @@ class LoginFragment : Fragment() {
                     SharedPrefWorker.saveString(loginContext, "name", name)
                     SharedPrefWorker.saveString(loginContext, "password", password)
 
-                    //find animation and run
-                    animationView1.setAnimation("success.json")
-                    animationView1.addAnimatorListener(object: Animator.AnimatorListener {
-                        override fun onAnimationEnd(animation: Animator?) {
-
-                            //delete fragment from stack - back press wont load this fragment
-                            view?.findNavController()?.popBackStack(R.id.loginFragment, true)
-
-                            //open new fragment
-                            view?.findNavController()?.navigate(R.id.wifiRoomsFragment)
-                        }
-                        override fun onAnimationRepeat(animation: Animator?) {}
-                        override fun onAnimationCancel(animation: Animator?) {}
-                        override fun onAnimationStart(animation: Animator?) {}
-                    })
-                    animationView1.playAnimation()
+                    playSuccessAnimation(animation, false)
                 }
                 else {
-
-                    animationView1.setAnimation("error.json")
-                    animationView1.addAnimatorListener(object: Animator.AnimatorListener {
-                        override fun onAnimationEnd(animation: Animator?) {
-
-                            //hide animation layout
-                            animationView1.visibility = View.GONE
-                            hideUIComponents(View.VISIBLE)
-
-                            Toast.makeText(activity, "Oops, server code "+response.code(), Toast.LENGTH_LONG).show()
-                        }
-                        override fun onAnimationRepeat(animation: Animator?) {}
-                        override fun onAnimationCancel(animation: Animator?) {}
-                        override fun onAnimationStart(animation: Animator?) {
-                            //we want to see only animation, hide other UI components
-                            hideUIComponents(View.GONE)
-                        }
-                    })
-                    animationView1.playAnimation()
+                    playErrorAnimation(animation, response)
                 }
             }
         })
@@ -141,14 +98,17 @@ class LoginFragment : Fragment() {
         CallAPI.setAuthentication(false)
         CallAPI.type.userLogin(UserRequest(name, password, CallAPI.api_key)).enqueue(object: Callback<UserResponse>{
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                Toast.makeText(activity, "Oops, something went wrong: "+t.message, Toast.LENGTH_LONG).show()
+                //Toast.makeText(activity, "Oops, something went wrong: "+t.message, Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 Log.i("TAG_API", "API response code: "+response.code())
-                if (response.code() == 200){
-                    Toast.makeText(activity, "Success! "+response.code(), Toast.LENGTH_LONG).show()
+                hideKeyboard()
 
+                val animation = view?.findViewById(R.id.lottie_anim_login) as LottieAnimationView
+                animation.visibility = View.VISIBLE
+
+                if (response.code() == 200){
                     //saving server response values into SharedPref
                     SharedPrefWorker.saveString(loginContext, "uid", response.body()!!.uid)
                     SharedPrefWorker.saveString(loginContext, "access", response.body()!!.access)
@@ -156,12 +116,60 @@ class LoginFragment : Fragment() {
                     //save current user name, password
                     SharedPrefWorker.saveString(loginContext, "name", name)
                     SharedPrefWorker.saveString(loginContext, "password", password)
+
+                    playSuccessAnimation(animation, true)
                 }
                 else {
-                    Toast.makeText(activity, "Oops, server code "+response.code(), Toast.LENGTH_LONG).show()
+                    playErrorAnimation(animation, response)
                 }
             }
         })
+    }
+
+    private fun playSuccessAnimation(view: LottieAnimationView, startNewFragment: Boolean){
+        //find animation and run
+        view.setAnimation("success.json")
+        view.addAnimatorListener(object: Animator.AnimatorListener {
+            override fun onAnimationEnd(animation: Animator?) {
+
+                if (startNewFragment){
+                    //delete fragment from stack - back press wont load this fragment
+                    view?.findNavController()?.popBackStack(R.id.loginFragment, true)
+
+                    //open new fragment
+                    view?.findNavController()?.navigate(R.id.wifiRoomsFragment)
+                }
+                else {
+                    view.visibility = View.GONE
+                    hideUIComponents(View.VISIBLE)
+                }
+            }
+            override fun onAnimationRepeat(animation: Animator?) {}
+            override fun onAnimationCancel(animation: Animator?) {}
+            override fun onAnimationStart(animation: Animator?) {
+                hideUIComponents(View.GONE)
+            }
+        })
+        view.playAnimation()
+    }
+
+    private fun playErrorAnimation(view: LottieAnimationView, response: Response<UserResponse>){
+        view.setAnimation("error.json")
+        view.addAnimatorListener(object: Animator.AnimatorListener {
+            override fun onAnimationEnd(animation: Animator?) {
+
+                //hide animation layout
+                view.visibility = View.GONE
+                hideUIComponents(View.VISIBLE)
+                Toast.makeText(activity, "Oops, server code "+response.code(), Toast.LENGTH_LONG).show()
+            }
+            override fun onAnimationRepeat(animation: Animator?) {}
+            override fun onAnimationCancel(animation: Animator?) {}
+            override fun onAnimationStart(animation: Animator?) {
+                hideUIComponents(View.GONE)
+            }
+        })
+        view.playAnimation()
     }
 
     private fun hideUIComponents(passedCommand: Int){

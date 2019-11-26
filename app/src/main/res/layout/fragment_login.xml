@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.LoginFragment">
+    tools:context=".ui.LoginFragment"
+    android:background="#FFFBFC"
+    >
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_anim_login"
-        android:layout_width="600dp"
-        android:layout_height="600dp"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="250dp"
-
         android:ems="10"
         android:hint="name"
         android:inputType="textPersonName"
@@ -35,7 +36,6 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="password"
-
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +45,9 @@
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/round"
+        android:textColor="#FFFFFF"
         android:text="login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +57,9 @@
         android:id="@+id/btn_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/round"
+        android:textColor="#FFFFFF"
         android:text="register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
