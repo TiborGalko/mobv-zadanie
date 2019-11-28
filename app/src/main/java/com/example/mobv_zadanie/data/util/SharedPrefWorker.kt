@@ -31,5 +31,24 @@ interface SharedPrefWorker {
             //second parameter is default value if object not found
             return sharedPref!!.getString(toRetrieve, defaultValue)
         }
+
+        fun saveBoolean(appContext: Context, toSave: String, value: Boolean){
+            val sharedPref: SharedPreferences = appContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+
+            if (sharedPref.getBoolean(PREF_NAME, false)) {
+                Log.i("TAG_API", "unable to retrieve SHAREDPREF file")
+            }
+            else {
+                val editor = sharedPref!!.edit()
+                editor.putBoolean(toSave, value)
+                editor.apply()
+            }
+        }
+
+        fun getBoolean(appContext: Context, toRetrieve: String): Boolean? {
+            val sharedPref: SharedPreferences = appContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+            //second parameter is default value if object not found
+            return sharedPref!!.getBoolean(toRetrieve, false)
+        }
     }
 }

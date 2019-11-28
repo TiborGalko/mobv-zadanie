@@ -44,10 +44,11 @@ class LoginFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
+    //after fragment onCreateView method
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //setting global variable to use in classes that are in this fragment UI, etc. show Toast from other class
+        //setting global variable to use in classes that are in this fragment UI, etc. show Toast from other class (not other fragment/activity!!!)
         loginContext = view.context
 
         btn_register.setOnClickListener { view ->
@@ -55,6 +56,16 @@ class LoginFragment : Fragment() {
         }
         btn_login.setOnClickListener { view ->
             loginUser(edit_login_name.text.toString(), edit_login_passw.text.toString())
+        }
+
+        //perform auto login if set
+        val autoLoginDefault = SharedPrefWorker.getString(loginContext,"autoLogName", "Do Not Login automatically")
+        val autoLoginValue = SharedPrefWorker.getBoolean(loginContext, "autoLoginChecked")
+        if (autoLoginDefault != "Do Not Login automatically" && autoLoginValue!!){
+            val userName = SharedPrefWorker.getString(loginContext, "autoLogName", "")
+            val userPassw = SharedPrefWorker.getString(loginContext, "autoLogPassw", "")
+            Log.i("TAG_API", "auto login: "+ userName+ " "+ userPassw)
+            loginUser(userName!!, userPassw!!)
         }
     }
 
@@ -102,7 +113,6 @@ class LoginFragment : Fragment() {
             }
 
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                Log.i("TAG_API", "API response code: "+response.code())
                 hideKeyboard()
 
                 val animation = view?.findViewById(R.id.lottie_anim_login) as LottieAnimationView
@@ -132,12 +142,13 @@ class LoginFragment : Fragment() {
         view.addAnimatorListener(object: Animator.AnimatorListener {
             override fun onAnimationEnd(animation: Animator?) {
 
+                //save name and password if auto login checked
+                saveUserLoginOption()
                 if (startNewFragment){
                     //delete fragment from stack - back press wont load this fragment
-                    view?.findNavController()?.popBackStack(R.id.loginFragment, true)
-
+                    view.findNavController().popBackStack(R.id.loginFragment, true)
                     //open new fragment
-                    view?.findNavController()?.navigate(R.id.wifiRoomsFragment)
+                    view.findNavController().navigate(R.id.wifiRoomsFragment)
                 }
                 else {
                     view.visibility = View.GONE
@@ -177,10 +188,21 @@ class LoginFragment : Fragment() {
         edit_login_passw.visibility = passedCommand
         btn_login.visibility = passedCommand
         btn_register.visibility = passedCommand
+        switch_stay.visibility = passedCommand
     }
 
     private fun hideKeyboard(){
         val imm = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
         imm!!.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+    }
+
+    private fun saveUserLoginOption(){
+        if (switch_stay.isChecked) {
+            SharedPrefWorker.saveBoolean(loginContext, "autoLoginChecked", true)
+            SharedPrefWorker.saveString(loginContext, "autoLogName", edit_login_name.text.toString())
+            SharedPrefWorker.saveString(loginContext, "autoLogPassw", edit_login_passw.text.toString())
+        } else {
+            SharedPrefWorker.saveString(loginContext, "autoLogName", "Do Not Login automatically")
+        }
     }
 }

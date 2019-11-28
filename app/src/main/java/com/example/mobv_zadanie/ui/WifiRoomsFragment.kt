@@ -1,18 +1,19 @@
 package com.example.mobv_zadanie.ui
 
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 
 import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.Injection
+import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.databinding.FragmentWifiRoomsBinding
 import com.example.mobv_zadanie.ui.viewModels.WifiRoomsViewModel
 
@@ -21,11 +22,10 @@ import com.example.mobv_zadanie.ui.viewModels.WifiRoomsViewModel
  */
 class WifiRoomsFragment : Fragment() {
 
+    //helper global variable
     companion object {
-
-        fun newInstance(): WifiRoomsFragment {
-            return WifiRoomsFragment()
-        }
+        @SuppressLint("StaticFieldLeak")
+        lateinit var wifiRoomsContext: Context
     }
 
     private lateinit var wifiRoomsViewModel: WifiRoomsViewModel
@@ -46,5 +46,41 @@ class WifiRoomsFragment : Fragment() {
         binding.model = wifiRoomsViewModel
 
         return binding.root
+    }
+
+    //after fragment onCreateView method
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //pass context to use for SharedPrefWorker
+        wifiRoomsContext = view.context
+    }
+
+    //enable options menu in this fragment
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
+    //inflate menu - need menu because user should have ability to uncheck auto login
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.custom_menu, menu)
+        //set value of user settings
+        menu.getItem(0).isChecked = SharedPrefWorker.getBoolean(wifiRoomsContext, "autoLoginChecked")!!
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    //select actions for menu
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_autoLogin -> {
+
+            item.isChecked = !item.isChecked
+            SharedPrefWorker.saveBoolean(wifiRoomsContext, "autoLoginChecked", item.isChecked)
+            true
+        }
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+        }
     }
 }
