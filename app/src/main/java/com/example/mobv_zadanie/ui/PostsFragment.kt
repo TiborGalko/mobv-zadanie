@@ -12,14 +12,14 @@ import com.example.mobv_zadanie.R
 /**
  * A simple [Fragment] subclass.
  */
-class WifiRoomsRecycleFragment : Fragment() {
+class PostsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wifi_rooms_recycle, container, false)
+        return inflater.inflate(R.layout.fragment_posts, container, false)
     }
 
 
