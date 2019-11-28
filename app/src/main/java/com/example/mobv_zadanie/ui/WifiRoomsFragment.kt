@@ -26,7 +26,6 @@ class WifiRoomsFragment : Fragment() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit var wifiRoomsContext: Context
-        lateinit var wifiRoomView: View
     }
 
     private lateinit var wifiRoomsViewModel: WifiRoomsViewModel
@@ -54,7 +53,6 @@ class WifiRoomsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //pass context to use for SharedPrefWorker
         wifiRoomsContext = view.context
-        wifiRoomView = view
     }
 
     //enable options menu in this fragment
