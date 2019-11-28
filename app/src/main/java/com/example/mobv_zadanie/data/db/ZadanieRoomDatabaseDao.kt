@@ -35,6 +35,9 @@ interface ZadanieRoomDatabaseDao {
     @Query("SELECT * FROM wifirooms")
     fun getWifiRooms(): LiveData<List<WifiRoomItem>>
 
+    @Query("SELECT * FROM wifirooms ORDER BY ssid ASC")
+    fun getWifiRoomsSorted(): LiveData<List<WifiRoomItem>>
+
     //Posts
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPost(postItem: PostItem)

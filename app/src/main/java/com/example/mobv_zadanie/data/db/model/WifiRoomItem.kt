@@ -4,14 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "wifirooms")
-data class WifiRoomItem(var ssid: String) {
-
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-
+data class WifiRoomItem(@PrimaryKey var ssid: String) {
     var posts: MutableList<PostItem> = ArrayList()
 
     override fun toString(): String {
-        return "WifiRoomItem(id=$id, ssid='$ssid', posts=$posts)"
+        return "WifiRoomItem(ssid='$ssid', posts=$posts)"
     }
 }

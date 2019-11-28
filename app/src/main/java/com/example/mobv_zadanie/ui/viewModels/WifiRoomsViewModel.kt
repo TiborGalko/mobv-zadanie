@@ -13,24 +13,41 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
 
     val input: MutableLiveData<String> = MutableLiveData()
 
-    val wifiRooms : LiveData<List<WifiRoomItem>>
-        get() = repository.getWifiRooms()
+    // Used to trigger navigation saves navigation state
+    private val _navigateToWifiRoom = MutableLiveData<String>()
+    // Public gettable val variable to use with mutable live data private variable
+    val navigateToWifiRoom
+        get() = _navigateToWifiRoom
 
-    val text: LiveData<String> = Transformations.map(wifiRooms) { it.toString() }
+
+    val wifiRooms : LiveData<List<WifiRoomItem>>
+        get() = repository.getWifiRoomsSorted()
 
     fun insertWord() {
         input.value?.let {
             if (it.isNotEmpty()) {
-                val wifiRoom = WifiRoomItem("Testovacia Roomka")
+                val wifiRoom = WifiRoomItem(it)
 
-                val postItem = PostItem(it)
+                val postItem = PostItem("Test post")
 
                 val userItem = UserItem("Testovaci User")
                 postItem.poster = userItem
 
                 wifiRoom.posts.add(postItem)
                 viewModelScope.launch { repository.insertWifiRoom(wifiRoomItem = wifiRoom) }
+                println("Inserted new wifi room")
             }
         }
+        input.value = ""
+    }
+
+    fun onWifiRoomItemClicked(ssid: String) {
+        _navigateToWifiRoom.value = ssid
+
+    }
+
+    // Called after navigation is finished to reset navigation state
+    fun onWifiRoomNavigated() {
+        _navigateToWifiRoom.value = null
     }
 }

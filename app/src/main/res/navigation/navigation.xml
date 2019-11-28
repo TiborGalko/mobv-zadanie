@@ -9,7 +9,24 @@
         android:id="@+id/wifiRoomsFragment"
         android:name="com.example.mobv_zadanie.ui.WifiRoomsFragment"
         android:label="fragment_wifi_rooms"
-        tools:layout="@layout/fragment_wifi_rooms" />
+        tools:layout="@layout/fragment_wifi_rooms" >
+        <argument
+            android:name="wifiRoomSSID"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_wifiRoomsFragment_to_postsFragment"
+            app:destination="@id/postsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/postsFragment"
+        android:name="com.example.mobv_zadanie.ui.PostsFragment"
+        android:label="fragment_posts"
+        tools:layout="@layout/fragment_posts">
+        <argument
+            android:name="wifiRoomSSID"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/loginFragment"

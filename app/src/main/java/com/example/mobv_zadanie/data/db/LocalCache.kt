@@ -7,7 +7,6 @@ import com.example.mobv_zadanie.data.db.model.UserItem
 import com.example.mobv_zadanie.data.db.model.WifiRoomItem
 
 class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
-
     suspend fun insertUser(userItem: UserItem) {
         dao.insertUser(userItem)
     }
@@ -38,6 +37,10 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
 
     fun getWifiRooms(): LiveData<List<WifiRoomItem>> {
         return dao.getWifiRooms()
+    }
+
+    fun getWifiRoomsSorted(): LiveData<List<WifiRoomItem>> {
+        return dao.getWifiRoomsSorted()
     }
 
     suspend fun insertPost(postItem: PostItem) {

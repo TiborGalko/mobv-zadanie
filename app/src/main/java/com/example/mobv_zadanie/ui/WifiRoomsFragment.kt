@@ -4,10 +4,11 @@ package com.example.mobv_zadanie.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
@@ -39,11 +40,37 @@ class WifiRoomsFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_wifi_rooms, container, false
         )
+
+        // Specify the current activity as the lifecycle owner of the binding.
+        // This is necessary so that the binding can observe LiveData updates.
         binding.lifecycleOwner = this
+
+        // get ViewModel from dependency Injection. Injection class creates new ViewModel from ViewModelFactory
         wifiRoomsViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(context!!))
             .get(WifiRoomsViewModel::class.java)
 
+        // set ViewModel
         binding.model = wifiRoomsViewModel
+
+        // attach recycler view adapter
+        val adapter = WifiRoomsAdapter(WifiRoomsListener { wifiRoomSSID ->
+            wifiRoomsViewModel.onWifiRoomItemClicked(wifiRoomSSID)
+        })
+        binding.wifiRoomsList.adapter = adapter
+
+        wifiRoomsViewModel.wifiRooms.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitList(it)
+            }
+        })
+
+        wifiRoomsViewModel.navigateToWifiRoom.observe(this, Observer { wifiRoom ->
+            wifiRoom?.let {
+                this.findNavController().navigate(
+                    WifiRoomsFragmentDirections.actionWifiRoomsFragmentToPostsFragment(wifiRoom))
+                wifiRoomsViewModel.onWifiRoomNavigated() // reset state
+            }
+        })
 
         return binding.root
     }
