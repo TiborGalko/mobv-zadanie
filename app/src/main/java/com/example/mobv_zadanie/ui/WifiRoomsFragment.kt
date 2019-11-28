@@ -68,6 +68,7 @@ class WifiRoomsFragment : Fragment() {
             wifiRoom?.let {
                 this.findNavController().navigate(
                     WifiRoomsFragmentDirections.actionWifiRoomsFragmentToPostsFragment(wifiRoom))
+                    //WifiRoomsFragmentDirections.actionWifiRoomsFragmentToContactsFragment())  TODO
                 wifiRoomsViewModel.onWifiRoomNavigated() // reset state
             }
         })

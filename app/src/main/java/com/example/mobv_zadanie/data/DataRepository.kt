@@ -18,10 +18,13 @@ class DataRepository private constructor(private val cache: LocalCache) {
             }
     }
 
-    fun getUsers() : LiveData<List<UserItem>> = cache.getUsers()
+
     fun getWifiRooms() : LiveData<List<WifiRoomItem>> = cache.getWifiRooms()
     fun getWifiRoomsSorted() : LiveData<List<WifiRoomItem>> = cache.getWifiRoomsSorted()
     suspend fun insertWifiRoom(wifiRoomItem: WifiRoomItem) = cache.insertWifiRoom(wifiRoomItem)
     suspend fun updateWifiRoom(wifiRoomItem: WifiRoomItem) = cache.updateWifiRoom(wifiRoomItem)
+
+    fun getUsers() : LiveData<List<UserItem>> = cache.getUsers()
+    suspend fun insertUser(userItem: UserItem) = cache.insertUser(userItem)
 
 }
