@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 
 import com.example.mobv_zadanie.R
@@ -146,9 +146,9 @@ class LoginFragment : Fragment() {
                 saveUserLoginOption()
                 if (startNewFragment){
                     //delete fragment from stack - back press wont load this fragment
-                    view.findNavController().popBackStack(R.id.loginFragment, true)
+                    findNavController().popBackStack(R.id.loginFragment, true)
                     //open new fragment
-                    view.findNavController().navigate(R.id.wifiRoomsFragment)
+                    findNavController().navigate(R.id.wifiRoomsFragment)
                 }
                 else {
                     view.visibility = View.GONE

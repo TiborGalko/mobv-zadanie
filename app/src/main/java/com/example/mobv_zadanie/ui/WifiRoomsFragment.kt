@@ -4,12 +4,12 @@ package com.example.mobv_zadanie.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
+
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 
 import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.Injection
@@ -26,6 +26,7 @@ class WifiRoomsFragment : Fragment() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit var wifiRoomsContext: Context
+        lateinit var wifiRoomView: View
     }
 
     private lateinit var wifiRoomsViewModel: WifiRoomsViewModel
@@ -53,6 +54,7 @@ class WifiRoomsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //pass context to use for SharedPrefWorker
         wifiRoomsContext = view.context
+        wifiRoomView = view
     }
 
     //enable options menu in this fragment
@@ -75,6 +77,10 @@ class WifiRoomsFragment : Fragment() {
 
             item.isChecked = !item.isChecked
             SharedPrefWorker.saveBoolean(wifiRoomsContext, "autoLoginChecked", item.isChecked)
+            true
+        }
+        R.id.action_logout -> {
+            findNavController().navigate(R.id.loginFragment)
             true
         }
         else -> {
