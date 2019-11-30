@@ -1,6 +1,8 @@
 package com.example.mobv_zadanie.data.webapi
 
+import com.example.mobv_zadanie.data.webapi.model.*
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -9,6 +11,7 @@ import retrofit2.http.POST
  * userRefresh  - call this method when received error response 401 - load uid, refresh and save access, refresh tokens via ../util/SharedPref.kt
  *              - same response body as userRegister or userLogin
  *
+ * roomList - getting rooms from api
  * other API calls should use access token from
  */
 
@@ -23,4 +26,7 @@ interface ListAPI{
 
         @POST("user/refresh.php")
         fun userRefresh(@Body body: UserRefresh): Call<UserResponse>
+
+        @POST("room/list.php")
+        suspend fun roomList(@Body body: RoomListRequest): Response<List<RoomListResponse>>
 }

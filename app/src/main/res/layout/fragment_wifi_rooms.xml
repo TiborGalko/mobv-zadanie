@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <!-- FOR TESTING ONLY -->
-        <EditText
+        <!--<EditText
             android:id="@+id/word_input"
             android:text="@={model.input}"
             android:layout_width="0dp"
@@ -35,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:onClick="@{() -> model.insertWord()}"
-            />
+            />-->
         <!-- FOR TESTING ONLY -->
 
         <androidx.recyclerview.widget.RecyclerView
@@ -44,7 +44,7 @@
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/word_btn"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 

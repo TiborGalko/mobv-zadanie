@@ -18,8 +18,8 @@ import com.airbnb.lottie.LottieAnimationView
 import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.data.webapi.CallAPI
-import com.example.mobv_zadanie.data.webapi.UserRequest
-import com.example.mobv_zadanie.data.webapi.UserResponse
+import com.example.mobv_zadanie.data.webapi.model.UserRequest
+import com.example.mobv_zadanie.data.webapi.model.UserResponse
 import kotlinx.android.synthetic.main.fragment_login.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -73,7 +73,13 @@ class LoginFragment : Fragment() {
 
         //CallAPI consumes object UserRequest, produces UserResponse
         CallAPI.setAuthentication(false)
-        CallAPI.type.userRegister(UserRequest(name, password, CallAPI.api_key)).enqueue(object: Callback<UserResponse>{
+        CallAPI.type.userRegister(
+            UserRequest(
+                name,
+                password,
+                CallAPI.api_key
+            )
+        ).enqueue(object: Callback<UserResponse>{
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 //Toast.makeText(activity, "Oops, something went wrong: "+t.message, Toast.LENGTH_LONG).show()
             }
@@ -107,7 +113,13 @@ class LoginFragment : Fragment() {
 
         //consumes object UserRequest, produces UserResponse
         CallAPI.setAuthentication(false)
-        CallAPI.type.userLogin(UserRequest(name, password, CallAPI.api_key)).enqueue(object: Callback<UserResponse>{
+        CallAPI.type.userLogin(
+            UserRequest(
+                name,
+                password,
+                CallAPI.api_key
+            )
+        ).enqueue(object: Callback<UserResponse>{
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 //Toast.makeText(activity, "Oops, something went wrong: "+t.message, Toast.LENGTH_LONG).show()
             }

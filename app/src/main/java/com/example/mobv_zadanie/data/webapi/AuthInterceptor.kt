@@ -21,7 +21,7 @@ class AuthInterceptor : Interceptor {
 
         //boolean from CallAPI
         if (useAuthentication){
-            request.addHeader("Authorization", SharedPrefWorker.getString(LoginFragment.loginContext,"access", "Token not restored"))
+            request.addHeader("Authorization", "Bearer " + SharedPrefWorker.getString(LoginFragment.loginContext,"access", "Token not restored"))
         }
 
         return chain.proceed(request.build())
