@@ -27,6 +27,10 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
         dao.insertWifiRoom(wifiRoomItem)
     }
 
+    suspend fun insertWifiRooms(wifiRoomItems: List<WifiRoomItem>) {
+        dao.insertWifiRooms(wifiRoomItems)
+    }
+
     suspend fun updateWifiRoom(wifiRoomItem: WifiRoomItem) {
         dao.updateWifiRoom(wifiRoomItem)
     }

@@ -26,6 +26,9 @@ interface ZadanieRoomDatabaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWifiRoom(wifiRoomItem: WifiRoomItem)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertWifiRooms(wifiRoomItems: List<WifiRoomItem>)
+
     @Update
     suspend fun updateWifiRoom(wifiRoomItem: WifiRoomItem)
 

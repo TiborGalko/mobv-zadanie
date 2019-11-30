@@ -1,11 +1,16 @@
 package com.example.mobv_zadanie.ui
 
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
+import android.net.wifi.SupplicantState
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -31,6 +36,8 @@ class WifiRoomsFragment : Fragment() {
 
     private lateinit var wifiRoomsViewModel: WifiRoomsViewModel
     private lateinit var binding: FragmentWifiRoomsBinding
+
+    private val LOCATION = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +80,38 @@ class WifiRoomsFragment : Fragment() {
             }
         })
 
+        if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //Request permission from user
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),LOCATION)
+        } else {//Permission already granted
+            saveCurrentWifiRoom()
+        }
+
         return binding.root
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && requestCode == LOCATION) {
+            //User allowed the location and you can read it now
+            println("Allowed")
+            saveCurrentWifiRoom()
+        }
+    }
+
+    private fun saveCurrentWifiRoom() {
+        val wifiManager = context!!.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifiInfo = wifiManager.connectionInfo
+        if (wifiInfo.supplicantState == SupplicantState.COMPLETED) {
+            val ssid = wifiInfo.ssid//Here you can access your SSID
+            val bssid = wifiInfo.bssid
+            println(bssid)
+            println(ssid)
+            wifiRoomsViewModel.saveCurrentWifiRoom(ssid, bssid)
+        }
     }
 
     //after fragment onCreateView method
@@ -81,6 +119,8 @@ class WifiRoomsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //pass context to use for SharedPrefWorker
         wifiRoomsContext = view.context
+
+        wifiRoomsViewModel.listWifiRooms(view.context)
     }
 
     //enable options menu in this fragment

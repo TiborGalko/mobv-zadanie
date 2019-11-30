@@ -1,17 +1,20 @@
 package com.example.mobv_zadanie.ui.viewModels
 
+import android.content.Context
 import androidx.lifecycle.*
 import com.example.mobv_zadanie.data.DataRepository
-import com.example.mobv_zadanie.data.db.model.PostItem
-import com.example.mobv_zadanie.data.db.model.UserItem
 import com.example.mobv_zadanie.data.db.model.WifiRoomItem
 import kotlinx.coroutines.launch
+import java.sql.Date
 
 
 // https://codelabs.developers.google.com/codelabs/kotlin-android-training-coroutines-and-room/#3
 class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
 
+    /*
+    TESTING
     val input: MutableLiveData<String> = MutableLiveData()
+     */
 
     // Used to trigger navigation saves navigation state
     private val _navigateToWifiRoom = MutableLiveData<String>()
@@ -19,10 +22,27 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
     val navigateToWifiRoom
         get() = _navigateToWifiRoom
 
-
     val wifiRooms : LiveData<List<WifiRoomItem>>
         get() = repository.getWifiRoomsSorted()
 
+    fun listWifiRooms(context: Context) {
+        viewModelScope.launch { repository.wifiRoomList(context) }
+    }
+
+    fun saveCurrentWifiRoom(ssid: String, bssid: String) {
+        val date = java.util.Date()
+        if (ssid == "<unknown ssid>" || ssid == "") {
+            val wifiRoom = WifiRoomItem(bssid, Date(date.time))
+            viewModelScope.launch { repository.insertWifiRoom(wifiRoomItem = wifiRoom) }
+        } else {
+            val wifiRoom = WifiRoomItem(ssid, Date(date.time))
+            viewModelScope.launch { repository.insertWifiRoom(wifiRoomItem = wifiRoom) }
+        }
+        println("Inserted new wifi room") //TODO remove
+    }
+
+    /*
+    TESTING ONLY
     fun insertWord() {
         input.value?.let {
             if (it.isNotEmpty()) {
@@ -39,7 +59,7 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
             }
         }
         input.value = ""
-    }
+    }*/
 
     fun onWifiRoomItemClicked(ssid: String) {
         _navigateToWifiRoom.value = ssid
