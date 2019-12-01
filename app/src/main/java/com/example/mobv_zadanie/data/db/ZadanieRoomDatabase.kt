@@ -6,14 +6,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.mobv_zadanie.data.db.model.MessageItem
-import com.example.mobv_zadanie.data.db.model.PostItem
-import com.example.mobv_zadanie.data.db.model.UserItem
-import com.example.mobv_zadanie.data.db.model.WifiRoomItem
+import com.example.mobv_zadanie.data.db.model.*
 
 // https://codelabs.developers.google.com/codelabs/kotlin-android-training-room-database/#5
 @Database(
-    entities = [PostItem::class, UserItem::class, WifiRoomItem::class, MessageItem::class], // This is where entities are added
+    entities = [PostItem::class, WifiRoomItem::class, MessageItem::class, ContactItem::class], // This is where entities are added
     version = 1,
     exportSchema = false
 )

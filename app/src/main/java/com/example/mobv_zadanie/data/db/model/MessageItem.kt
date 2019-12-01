@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "messages")
 data class MessageItem(
     @PrimaryKey val id: Int,
-    val sender: UserItem,
-    val receiver: UserItem,
+    val sender: String,
+    val receiver: String,
     val text: String
     )
 {

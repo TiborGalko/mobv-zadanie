@@ -15,6 +15,7 @@
         android:layout_height="match_parent">
 
         <!-- FOR TESTING ONLY -->
+        <!--
         <EditText
             android:id="@+id/contact_input"
             android:text="@={model.input}"
@@ -35,8 +36,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:onClick="@{() -> model.insertContact()}"
-            />
+            />-->
         <!-- FOR TESTING ONLY -->
+
+        <Button
+            android:id="@+id/to_wifiRooms_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/wifi_rooms"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/contacts_list"
@@ -44,7 +53,7 @@
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/contact_btn"
+            app:layout_constraintTop_toBottomOf="@id/to_wifiRooms_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 

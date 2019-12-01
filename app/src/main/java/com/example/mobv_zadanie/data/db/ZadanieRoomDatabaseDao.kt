@@ -2,26 +2,10 @@ package com.example.mobv_zadanie.data.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.mobv_zadanie.data.db.model.MessageItem
-import com.example.mobv_zadanie.data.db.model.PostItem
-import com.example.mobv_zadanie.data.db.model.UserItem
-import com.example.mobv_zadanie.data.db.model.WifiRoomItem
+import com.example.mobv_zadanie.data.db.model.*
 
 @Dao
 interface ZadanieRoomDatabaseDao {
-    //Users
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(userItem: UserItem)
-
-    @Update
-    suspend fun updateUser(userItem: UserItem)
-
-    @Delete
-    suspend fun deleteUser(userItem: UserItem)
-
-    @Query("SELECT * FROM users")
-    fun getUsers(): LiveData<List<UserItem>>
-
     // WifiRooms
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWifiRoom(wifiRoomItem: WifiRoomItem)
@@ -40,6 +24,13 @@ interface ZadanieRoomDatabaseDao {
 
     @Query("SELECT * FROM wifirooms ORDER BY ssid ASC")
     fun getWifiRoomsSorted(): LiveData<List<WifiRoomItem>>
+
+    //Contacts
+    @Query("SELECT * FROM contacts")
+    fun getContacts(): LiveData<List<ContactItem>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertContacts(contactItems: List<ContactItem>)
 
     //Posts
     @Insert(onConflict = OnConflictStrategy.REPLACE)

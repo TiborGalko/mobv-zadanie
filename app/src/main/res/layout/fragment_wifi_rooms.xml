@@ -38,13 +38,21 @@
             />-->
         <!-- FOR TESTING ONLY -->
 
+        <Button
+            android:id="@+id/to_contacts_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/contacts"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/wifi_rooms_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/to_contacts_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
