@@ -1,28 +1,9 @@
 package com.example.mobv_zadanie.data.db
 
 import androidx.lifecycle.LiveData
-import com.example.mobv_zadanie.data.db.model.MessageItem
-import com.example.mobv_zadanie.data.db.model.PostItem
-import com.example.mobv_zadanie.data.db.model.UserItem
-import com.example.mobv_zadanie.data.db.model.WifiRoomItem
+import com.example.mobv_zadanie.data.db.model.*
 
 class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
-    suspend fun insertUser(userItem: UserItem) {
-        dao.insertUser(userItem)
-    }
-
-    suspend fun updateUser(userItem: UserItem) {
-        dao.updateUser(userItem)
-    }
-
-    suspend fun deleteUser(userItem: UserItem) {
-        dao.deleteUser(userItem)
-    }
-
-    fun getUsers(): LiveData<List<UserItem>> {
-        return dao.getUsers()
-    }
-
     suspend fun insertWifiRoom(wifiRoomItem: WifiRoomItem) {
         dao.insertWifiRoom(wifiRoomItem)
     }
@@ -45,6 +26,15 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
 
     fun getWifiRoomsSorted(): LiveData<List<WifiRoomItem>> {
         return dao.getWifiRoomsSorted()
+    }
+
+    // Contacts implementations
+    fun getContacts(): LiveData<List<ContactItem>> {
+        return dao.getContacts()
+    }
+
+    suspend fun insertContacts(contactItems: List<ContactItem>) {
+        dao.insertContacts(contactItems)
     }
 
     suspend fun insertPost(postItem: PostItem) {

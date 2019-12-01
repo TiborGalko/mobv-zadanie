@@ -8,7 +8,7 @@ data class PostItem(var text: String) {
 
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
-    var poster: UserItem? = null
+    var poster: String? = null
 
 
     override fun toString(): String {

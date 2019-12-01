@@ -37,7 +37,7 @@ class WifiRoomsFragment : Fragment() {
     private lateinit var wifiRoomsViewModel: WifiRoomsViewModel
     private lateinit var binding: FragmentWifiRoomsBinding
 
-    private val LOCATION = 1
+    private val LOCATION = 1 // used for identifying permission call
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +51,12 @@ class WifiRoomsFragment : Fragment() {
         // Specify the current activity as the lifecycle owner of the binding.
         // This is necessary so that the binding can observe LiveData updates.
         binding.lifecycleOwner = this
+
+        binding.toContactsBtn.setOnClickListener {
+            this.findNavController().navigate(
+                WifiRoomsFragmentDirections.actionWifiRoomsFragmentToContactsFragment()
+            )
+        }
 
         // get ViewModel from dependency Injection. Injection class creates new ViewModel from ViewModelFactory
         wifiRoomsViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(context!!))
@@ -75,11 +81,12 @@ class WifiRoomsFragment : Fragment() {
             wifiRoom?.let {
                 this.findNavController().navigate(
                     WifiRoomsFragmentDirections.actionWifiRoomsFragmentToPostsFragment(wifiRoom))
-                    //WifiRoomsFragmentDirections.actionWifiRoomsFragmentToContactsFragment())  TODO
                 wifiRoomsViewModel.onWifiRoomNavigated() // reset state
             }
         })
 
+        // This is because you need ACCESS_FINE_LOCATION permissions to get ssid from wifiManager
+        // https://stackoverflow.com/questions/49977395/on-oreo-8-1-0-not-getting-the-correct-wifi-ssid-its-showing-unknown-ssid-t?noredirect=1
         if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //Request permission from user
             requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),LOCATION)

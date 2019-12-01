@@ -3,7 +3,6 @@ package com.example.mobv_zadanie.data.db
 import androidx.room.TypeConverter
 import com.example.mobv_zadanie.data.db.model.MessageItem
 import com.example.mobv_zadanie.data.db.model.PostItem
-import com.example.mobv_zadanie.data.db.model.UserItem
 import com.example.mobv_zadanie.data.db.model.WifiRoomItem
 import com.google.gson.Gson
 import java.sql.Blob
@@ -19,17 +18,6 @@ class TypeConverters {
     @TypeConverter
     fun jsonToList(value: String): List<String>? {
         val objects = Gson().fromJson(value, Array<String>::class.java) as Array<String>
-        return objects.toList()
-    }
-
-    @TypeConverter
-    fun userItemListToJson(value: List<UserItem>?): String {
-        return Gson().toJson(value)
-    }
-
-    @TypeConverter
-    fun jsonToUserItemList(value: String): List<UserItem>? {
-        val objects = Gson().fromJson(value, Array<UserItem>::class.java) as Array<UserItem>
         return objects.toList()
     }
 
@@ -64,16 +52,6 @@ class TypeConverters {
     fun jsonToMessageItemList(value: String): List<MessageItem>? {
         val objects = Gson().fromJson(value, Array<MessageItem>::class.java) as Array<MessageItem>
         return objects.toList()
-    }
-
-    @TypeConverter
-    fun userItemToJson(value: UserItem?): String {
-        return Gson().toJson(value)
-    }
-
-    @TypeConverter
-    fun jsonToUserItem(value: String): UserItem? {
-        return Gson().fromJson(value, UserItem::class.java) as UserItem
     }
 
     @TypeConverter

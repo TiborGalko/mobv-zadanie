@@ -29,4 +29,7 @@ interface ListAPI{
 
         @POST("room/list.php")
         suspend fun roomList(@Body body: RoomListRequest): Response<List<RoomListResponse>>
+
+        @POST("contact/list.php")
+        suspend fun contactList(@Body body: ContactListRequest): Response<List<ContactListResponse>>
 }

@@ -5,15 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mobv_zadanie.data.db.model.UserItem
+import com.example.mobv_zadanie.data.db.model.ContactItem
 import com.example.mobv_zadanie.databinding.ListItemContactsBinding
 
-class ContactsAdapter(val clickListener: ContactsListener) : ListAdapter<UserItem, ContactsAdapter.ViewHolder>(ContactsDiffCallback()) {
+class ContactsAdapter(val clickListener: ContactsListener) : ListAdapter<ContactItem, ContactsAdapter.ViewHolder>(ContactsDiffCallback()) {
 
     class ViewHolder private constructor(val binding: ListItemContactsBinding) : RecyclerView.ViewHolder(binding.root) {
 
         // Calls bindings from BindingUtils
-        fun bind(item: UserItem, clickListener: ContactsListener) {
+        fun bind(item: ContactItem, clickListener: ContactsListener) {
             binding.contact = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
@@ -38,17 +38,17 @@ class ContactsAdapter(val clickListener: ContactsListener) : ListAdapter<UserIte
     }
 }
 
-class ContactsDiffCallback() : DiffUtil.ItemCallback<UserItem>() {
-    override fun areItemsTheSame(oldItem: UserItem, newItem: UserItem): Boolean {
+class ContactsDiffCallback() : DiffUtil.ItemCallback<ContactItem>() {
+    override fun areItemsTheSame(oldItem: ContactItem, newItem: ContactItem): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: UserItem, newItem: UserItem): Boolean {
+    override fun areContentsTheSame(oldItem: ContactItem, newItem: ContactItem): Boolean {
         return oldItem == newItem
     }
 }
 
 
-class ContactsListener(val clickListener: (userName: String) -> Unit) {
-    fun onClick(user: UserItem) = clickListener(user.name)
+class ContactsListener(val clickListener: (contactName: String) -> Unit) {
+    fun onClick(contact: ContactItem) = clickListener(contact.name)
 }
