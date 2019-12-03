@@ -5,10 +5,13 @@ import android.content.Context
 import android.util.Log
 import com.example.mobv_zadanie.ui.LoginFragment
 import com.google.gson.GsonBuilder
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 interface CallAPI{
 
@@ -23,6 +26,7 @@ interface CallAPI{
                     return create()
             }
 
+
         fun setAuthentication(value: Boolean){
             useAuthentication = value
         }
@@ -30,6 +34,7 @@ interface CallAPI{
         fun create(): ListAPI {
 
             val gson = GsonBuilder().setLenient().create()
+
 
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY

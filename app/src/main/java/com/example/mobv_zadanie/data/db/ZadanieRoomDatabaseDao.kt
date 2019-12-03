@@ -36,11 +36,17 @@ interface ZadanieRoomDatabaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPost(postItem: PostItem)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPosts(wifiRoomItems: List<PostItem>)
+
     @Update
     suspend fun updatePost(postItem: PostItem)
 
     @Delete
     suspend fun deletePost(postItem: PostItem)
+
+    @Query("SELECT * FROM posts ORDER BY time ASC")
+    fun getRoomPostsSorted(): LiveData<List<PostItem>>
 
     @Query("SELECT * FROM posts")
     fun getPosts(): LiveData<List<PostItem>>

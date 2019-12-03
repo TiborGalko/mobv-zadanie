@@ -28,8 +28,15 @@ interface ListAPI{
         fun userRefresh(@Body body: UserRefresh): Call<UserResponse>
 
         @POST("room/list.php")
-        suspend fun roomList(@Body body: RoomListRequest): Response<List<RoomListResponse>>
+        suspend fun roomList(@Body body: RoomListRequest): Call<List<RoomListResponse>>
 
         @POST("contact/list.php")
         suspend fun contactList(@Body body: ContactListRequest): Response<List<ContactListResponse>>
+
+        @POST("room/read.php")
+        suspend fun messagesList(@Body body: RoomMessagesListRequest): Response<List<RoomMessagesListResponse>>
+
+        @POST("room/message.php")
+        suspend fun message(@Body body: RoomMessageRequest): Response<Any>
+
 }

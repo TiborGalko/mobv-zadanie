@@ -9,6 +9,7 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
     }
 
     suspend fun insertWifiRooms(wifiRoomItems: List<WifiRoomItem>) {
+        println("pocet roomiek " + wifiRoomItems.size)
         dao.insertWifiRooms(wifiRoomItems)
     }
 
@@ -41,6 +42,11 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
         dao.insertPost(postItem)
     }
 
+    suspend fun insertPosts(postItems: List<PostItem>) {
+        println("pocet postov v room " + postItems.size)
+        dao.insertPosts(postItems)
+    }
+
     suspend fun updatePost(postItem: PostItem) {
         dao.updatePost(postItem)
     }
@@ -52,6 +58,11 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
     fun getPosts(): LiveData<List<PostItem>> {
         return dao.getPosts()
     }
+
+    fun getRoomPostsSorted(): LiveData<List<PostItem>> {
+        return dao.getRoomPostsSorted()
+    }
+
 
     suspend fun insertMessage(messageItem: MessageItem) {
         dao.insertMessage(messageItem)

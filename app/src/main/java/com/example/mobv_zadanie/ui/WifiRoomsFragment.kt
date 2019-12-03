@@ -10,6 +10,7 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -47,7 +48,7 @@ class WifiRoomsFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_wifi_rooms, container, false
         )
-
+        (activity as AppCompatActivity).supportActionBar?.title = "Rooms"
         // Specify the current activity as the lifecycle owner of the binding.
         // This is necessary so that the binding can observe LiveData updates.
         binding.lifecycleOwner = this
