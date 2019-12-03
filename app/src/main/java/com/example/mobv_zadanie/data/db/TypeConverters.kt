@@ -6,7 +6,7 @@ import com.example.mobv_zadanie.data.db.model.PostItem
 import com.example.mobv_zadanie.data.db.model.WifiRoomItem
 import com.google.gson.Gson
 import java.sql.Blob
-import java.sql.Date
+import java.sql.Timestamp
 
 class TypeConverters {
 
@@ -85,13 +85,13 @@ class TypeConverters {
     }
 
     @TypeConverter
-    fun dateToJson(value: Date): String {
+    fun dateToJson(value: Timestamp): String {
         return Gson().toJson(value)
     }
 
     @TypeConverter
-    fun jsonToDate(value: String): Date {
-        return Gson().fromJson(value, Date::class.java) as Date
+    fun jsonToDate(value: String): Timestamp {
+        return Gson().fromJson(value, Timestamp::class.java) as Timestamp
     }
 
 }

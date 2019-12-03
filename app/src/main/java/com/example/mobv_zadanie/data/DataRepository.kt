@@ -44,7 +44,7 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             val response = api.roomList(RoomListRequest(uid, CallAPI.api_key))
             if (response.isSuccessful) {
                 response.body()?.let {
-                    return cache.insertWifiRooms(it.map { item -> WifiRoomItem(item.roomId, item.time) })
+                    return cache.insertWifiRooms(it.map { item -> WifiRoomItem(item.roomid, item.time) })
                 }
             }
         } catch (ex: ConnectException) {

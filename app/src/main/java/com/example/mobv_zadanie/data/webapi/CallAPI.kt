@@ -29,7 +29,7 @@ interface CallAPI{
 
         fun create(): ListAPI {
 
-            val gson = GsonBuilder().setLenient().create()
+            val gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setLenient().create()
 
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY

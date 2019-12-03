@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import com.example.mobv_zadanie.data.DataRepository
 import com.example.mobv_zadanie.data.db.model.WifiRoomItem
 import kotlinx.coroutines.launch
-import java.sql.Date
+import java.sql.Timestamp
 
 
 // https://codelabs.developers.google.com/codelabs/kotlin-android-training-coroutines-and-room/#3
@@ -32,10 +32,10 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
     fun saveCurrentWifiRoom(ssid: String, bssid: String) {
         val date = java.util.Date()
         if (ssid == "<unknown ssid>" || ssid == "") {
-            val wifiRoom = WifiRoomItem(bssid, Date(date.time))
+            val wifiRoom = WifiRoomItem(bssid, Timestamp(date.time))
             viewModelScope.launch { repository.insertWifiRoom(wifiRoomItem = wifiRoom) }
         } else {
-            val wifiRoom = WifiRoomItem(ssid, Date(date.time))
+            val wifiRoom = WifiRoomItem(ssid, Timestamp(date.time))
             viewModelScope.launch { repository.insertWifiRoom(wifiRoomItem = wifiRoom) }
         }
         println("Inserted new wifi room") //TODO remove
