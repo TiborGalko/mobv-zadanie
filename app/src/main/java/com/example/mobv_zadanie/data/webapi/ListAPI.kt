@@ -32,4 +32,10 @@ interface ListAPI{
 
         @POST("contact/list.php")
         suspend fun contactList(@Body body: ContactListRequest): Response<List<ContactListResponse>>
+
+        @POST("room/read.php")
+        suspend fun postList(@Body body: PostListRequest): Response<List<PostListResponse>>
+
+        @POST("room/message.php")
+        suspend fun postMessage(@Body body: PostRequest)
 }

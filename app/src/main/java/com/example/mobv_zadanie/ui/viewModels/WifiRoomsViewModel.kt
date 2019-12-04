@@ -29,6 +29,8 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
         viewModelScope.launch { repository.wifiRoomList(context) }
     }
 
+
+
     fun saveCurrentWifiRoom(ssid: String, bssid: String) {
         val date = java.util.Date()
         if (ssid == "<unknown ssid>" || ssid == "") {

@@ -37,20 +37,25 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
         dao.insertContacts(contactItems)
     }
 
-    suspend fun insertPost(postItem: PostItem) {
-        dao.insertPost(postItem)
+    suspend fun insertPosts(postItem: List<PostItem>) {
+        dao.insertPosts(postItem)
     }
 
     suspend fun updatePost(postItem: PostItem) {
         dao.updatePost(postItem)
     }
 
-    suspend fun deletePost(postItem: PostItem) {
+    fun deletePost(postItem: PostItem) {
         dao.deletePost(postItem)
     }
 
+
     fun getPosts(): LiveData<List<PostItem>> {
         return dao.getPosts()
+    }
+
+    fun getPostssorted(): LiveData<List<PostItem>> {
+        return dao.getPostsSorted()
     }
 
     suspend fun insertMessage(messageItem: MessageItem) {
