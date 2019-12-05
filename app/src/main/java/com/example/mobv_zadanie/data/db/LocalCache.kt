@@ -58,8 +58,16 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
         return dao.getPostsSorted()
     }
 
+    fun getroomPosts(roomid:String): LiveData<List<PostItem>> {
+        return dao.getroomPosts(roomid)
+    }
+
     suspend fun insertMessage(messageItem: MessageItem) {
         dao.insertMessage(messageItem)
+    }
+
+    suspend fun insertChatMessages(messageList: List<MessageItem>) {
+        dao.insertMessages(messageList)
     }
 
     suspend fun updateMessage(messageItem: MessageItem) {
@@ -73,4 +81,13 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
     fun getMessages(): LiveData<List<MessageItem>> {
         return dao.getMessages()
     }
+
+    fun getChatsorted(): LiveData<List<MessageItem>> {
+        return dao.getChatSorted()
+    }
+
+    fun getcontactchatsorted(contact:String): LiveData<List<MessageItem>> {
+        return dao.getcontactchatsorted(contact)
+    }
+
 }

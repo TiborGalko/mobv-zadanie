@@ -9,19 +9,18 @@ import com.example.mobv_zadanie.data.db.model.PostItem
 import com.example.mobv_zadanie.ui.PostAdapter.ViewHolder
 import com.example.mobv_zadanie.databinding.ListItemPostsBinding
 
-class PostAdapter() : ListAdapter<PostItem, ViewHolder>(PostsDiffCallback()){
+class PostAdapter(var room:String) : ListAdapter<PostItem, PostAdapter.ViewHolder>(PostsDiffCallback()){
 
     class ViewHolder private constructor(val binding: ListItemPostsBinding) : RecyclerView.ViewHolder(binding.root) {
         // Calls bindings from BindingUtils
-        fun bind(item: PostItem) {
-            //binding.post = item
-            binding.time.text = item.time.toString()
-            binding.message.text = item.message
-            binding.name.text = item.name
-            binding.executePendingBindings()
+        fun bind(item: PostItem, room:String) {
+            if(room==item.roomdid){
+                binding.time.text = item.time.toString()
+                binding.message.text = item.message
+                binding.name.text = item.name
+                binding.executePendingBindings()
+            }
         }
-
-
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
@@ -35,13 +34,11 @@ class PostAdapter() : ListAdapter<PostItem, ViewHolder>(PostsDiffCallback()){
         return ViewHolder.from(parent)
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position) // getItem gets WifiRoomItem from ListAdapter
-        holder.bind(item)
+        val item = getItem(position)
+        holder.bind(item,room)
     }
 
 }
-
-
 
 
 class PostsDiffCallback() : DiffUtil.ItemCallback<PostItem>() {
@@ -50,7 +47,7 @@ class PostsDiffCallback() : DiffUtil.ItemCallback<PostItem>() {
     }
 
     override fun areContentsTheSame(oldItem: PostItem, newItem: PostItem): Boolean {
-        return oldItem == newItem // Calls WifiRoomItem.equals
+        return oldItem == newItem
     }
 
 }

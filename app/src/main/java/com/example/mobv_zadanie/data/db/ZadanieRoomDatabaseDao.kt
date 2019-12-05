@@ -54,12 +54,16 @@ interface ZadanieRoomDatabaseDao {
     @Query("SELECT * FROM posts ORDER BY id DESC")
     fun getPostsSorted(): LiveData<List<PostItem>>
 
-
+    @Query("SELECT * FROM posts WHERE roomdid =:roomid ORDER BY id DESC")
+    fun getroomPosts(roomid:String): LiveData<List<PostItem>>
 
 
     //Messages
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMessage(messageItem: MessageItem)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMessages(messageList: List<MessageItem>)
 
     @Update
     suspend fun updateMessage(messageItem: MessageItem)
@@ -69,4 +73,12 @@ interface ZadanieRoomDatabaseDao {
 
     @Query("SELECT * FROM messages")
     fun getMessages(): LiveData<List<MessageItem>>
+
+    @Query("SELECT * FROM messages ORDER BY id DESC")
+    fun getChatSorted(): LiveData<List<MessageItem>>
+
+    @Query("SELECT * FROM messages WHERE contact =:contact ORDER BY id DESC")
+    fun getcontactchatsorted(contact:String): LiveData<List<MessageItem>>
+
+
 }

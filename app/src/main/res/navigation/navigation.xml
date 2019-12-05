@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_postsFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
+        <action
+            android:id="@+id/action_postsFragment_to_chatmessagesFragment"
+            app:destination="@id/chatmessagesFragment" />
     </fragment>
 
     <fragment
@@ -48,8 +51,8 @@
         android:label="fragment_contacts"
         tools:layout="@layout/fragment_contacts">
         <action
-            android:id="@+id/action_contactsFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
+            android:id="@+id/action_contactsFragment_to_chatmessagesFragment"
+            app:destination="@id/chatmessagesFragment" />
         <action
             android:id="@+id/action_contactsFragment_to_wifiRoomsFragment"
             app:destination="@id/wifiRoomsFragment" />
@@ -59,11 +62,17 @@
         android:name="com.example.mobv_zadanie.ui.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" >
-        <argument
-            android:name="contactId"
-            app:argType="string" />
         <action
             android:id="@+id/action_chatFragment_to_postsFragment"
             app:destination="@id/postsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatmessagesFragment"
+        android:name="com.example.mobv_zadanie.ui.ChatMessagesFragment"
+        android:label="fragment_chat_messages"
+        tools:layout="@layout/fragment_chat_messages" >
+        <argument
+            android:name="contactId"
+            app:argType="string" />
     </fragment>
 </navigation>

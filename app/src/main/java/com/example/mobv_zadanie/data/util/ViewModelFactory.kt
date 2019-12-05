@@ -3,10 +3,7 @@ package com.example.mobv_zadanie.data.util
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.mobv_zadanie.data.DataRepository
-import com.example.mobv_zadanie.ui.viewModels.ChatViewModel
-import com.example.mobv_zadanie.ui.viewModels.ContactsViewModel
-import com.example.mobv_zadanie.ui.viewModels.PostsViewModel
-import com.example.mobv_zadanie.ui.viewModels.WifiRoomsViewModel
+import com.example.mobv_zadanie.ui.viewModels.*
 
 class ViewModelFactory(private val repository: DataRepository) : ViewModelProvider.Factory {
 
@@ -23,8 +20,10 @@ class ViewModelFactory(private val repository: DataRepository) : ViewModelProvid
         }else if (modelClass.isAssignableFrom(ChatViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ChatViewModel(repository) as T
+        }else if (modelClass.isAssignableFrom(ChatMessagesViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return ChatMessagesViewModel(repository) as T
         }
-
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 

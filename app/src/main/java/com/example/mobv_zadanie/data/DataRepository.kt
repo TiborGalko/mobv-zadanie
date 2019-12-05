@@ -4,15 +4,13 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import com.example.mobv_zadanie.data.db.LocalCache
 import com.example.mobv_zadanie.data.db.model.ContactItem
+import com.example.mobv_zadanie.data.db.model.MessageItem
 import com.example.mobv_zadanie.data.db.model.PostItem
 import com.example.mobv_zadanie.data.db.model.WifiRoomItem
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.data.webapi.CallAPI
 import com.example.mobv_zadanie.data.webapi.ListAPI
-import com.example.mobv_zadanie.data.webapi.model.ContactListRequest
-import com.example.mobv_zadanie.data.webapi.model.PostListRequest
-import com.example.mobv_zadanie.data.webapi.model.PostRequest
-import com.example.mobv_zadanie.data.webapi.model.RoomListRequest
+import com.example.mobv_zadanie.data.webapi.model.*
 import java.net.ConnectException
 
 class DataRepository private constructor(private val cache: LocalCache, private val api: ListAPI) {
@@ -32,6 +30,9 @@ class DataRepository private constructor(private val cache: LocalCache, private 
     fun getWifiRooms() : LiveData<List<WifiRoomItem>> = cache.getWifiRooms()
     fun getWifiRoomsSorted() : LiveData<List<WifiRoomItem>> = cache.getWifiRoomsSorted()
     fun getPostsSorted() : LiveData<List<PostItem>> = cache.getPostssorted()
+    fun getChatSorted() : LiveData<List<MessageItem>> = cache.getChatsorted()
+    fun getroomPosts(roomid:String) : LiveData<List<PostItem>> = cache.getroomPosts(roomid)
+    fun getcontactSorted(contact:String) : LiveData<List<MessageItem>> = cache.getcontactchatsorted(contact)
     suspend fun insertWifiRoom(wifiRoomItem: WifiRoomItem) = cache.insertWifiRoom(wifiRoomItem)
     suspend fun updateWifiRoom(wifiRoomItem: WifiRoomItem) = cache.updateWifiRoom(wifiRoomItem)
     fun deletepost(postItem: PostItem) = cache.deletePost(postItem)
@@ -50,6 +51,29 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             if (response.isSuccessful) {
                 response.body()?.let {
                     return cache.insertWifiRooms(it.map { item -> WifiRoomItem(item.roomid, item.time) })
+                }
+            }
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+            return
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return
+        }
+
+    }
+
+    suspend fun chatList(context: Context, contact:String) {
+        CallAPI.setAuthentication(true)
+        try {
+            val uid: String = SharedPrefWorker.getString(context, "uid", "not_found").toString()
+            if (uid == "not_found") {
+                return
+            }
+            val response = api.chatList(MessageListRequest(uid, contact, CallAPI.api_key))
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    return cache.insertChatMessages(it.map { item -> MessageItem(item.uid,item.contact,item.message,item.time,item.uid_name,item.contact_name,item.uid_fid,item.contact_fid) })
                 }
             }
         } catch (ex: ConnectException) {
@@ -93,6 +117,24 @@ class DataRepository private constructor(private val cache: LocalCache, private 
                 return
             }
             api.postMessage(PostRequest(uid, room, message, CallAPI.api_key))
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+            return
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return
+        }
+
+    }
+
+    suspend fun postChatMessage(context: Context, contact:String, message:String) {
+        CallAPI.setAuthentication(true)
+        try {
+            val uid: String = SharedPrefWorker.getString(context, "uid", "not_found").toString()
+            if (uid == "not_found") {
+                return
+            }
+            api.postChatMessage(MessageRequest(uid, contact, message, CallAPI.api_key))
         } catch (ex: ConnectException) {
             ex.printStackTrace()
             return

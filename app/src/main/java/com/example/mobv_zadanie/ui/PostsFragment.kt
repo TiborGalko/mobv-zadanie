@@ -53,14 +53,16 @@ class PostsFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.addButton.setOnClickListener {
             this.findNavController().navigate(
-                PostsFragmentDirections.actionPostsFragmentToChatFragment(args.wifiRoomSSID)
+                PostsFragmentDirections.actionPostsFragmentToChatFragment()
             )
         }
+
         postsViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(context!!))
             .get(PostsViewModel::class.java)
         binding.model = postsViewModel
-        val adapter = PostAdapter()
+        val adapter = PostAdapter(args.wifiRoomSSID)
         binding.posts.adapter = adapter
+        binding.posts.removeAllViewsInLayout()
         //println(postsViewModel.roomPosts.value)
         postsViewModel.roomPosts.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -117,6 +119,7 @@ class PostsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomPostContext = view.context
+        binding.posts.removeAllViewsInLayout()
         SharedPrefWorker.saveString(roomPostContext, "room",args.wifiRoomSSID )
         val wifiManager = context!!.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val wifiInfo = wifiManager.connectionInfo
@@ -138,6 +141,16 @@ class PostsFragment : Fragment() {
             }
         }
         postsViewModel.listPosts(view.context, binding)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.posts.removeAllViewsInLayout()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.posts.removeAllViewsInLayout()
     }
 
 

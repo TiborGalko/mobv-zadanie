@@ -50,5 +50,5 @@ class ContactsDiffCallback() : DiffUtil.ItemCallback<ContactItem>() {
 
 
 class ContactsListener(val clickListener: (contactName: String) -> Unit) {
-    fun onClick(contact: ContactItem) = clickListener(contact.name)
+    fun onClick(contact: ContactItem) = clickListener(contact.id)
 }

@@ -1,6 +1,7 @@
 package com.example.mobv_zadanie.ui.viewModels
 
 import android.content.Context
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -15,6 +16,8 @@ import kotlinx.coroutines.launch
 class PostsViewModel(private val repository: DataRepository) : ViewModel() {
     private val _navigateToPost = MutableLiveData<String>()
 
+
+
     val navigateToPosts
         get() = _navigateToPost
 
@@ -27,8 +30,7 @@ class PostsViewModel(private val repository: DataRepository) : ViewModel() {
 
     fun listPosts(context: Context, binding: FragmentPostsBinding) {
         val room = SharedPrefWorker.getString(context, "room", "ssid").toString()
-        binding.posts.adapter?.notifyDataSetChanged()
-        viewModelScope.launch { repository.postList(context,room) }
+        viewModelScope.launch { repository.postList(context,room)}
     }
 
 

@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="146dp"
         android:background="@drawable/rounded_corner_box"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <ImageView
             android:id="@+id/avatar"
@@ -42,7 +43,8 @@
             app:layout_constraintHorizontal_bias="0.02"
             app:layout_constraintStart_toEndOf="@+id/avatar"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.062" />
+            app:layout_constraintVertical_bias="0.062"
+            />
 
         <TextView
             android:id="@+id/time"

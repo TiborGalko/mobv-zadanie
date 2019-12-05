@@ -32,7 +32,6 @@ class ChatFragment : Fragment() {
         lateinit var ChatContext: Context
     }
 
-
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var binding: FragmentChatBinding
 
