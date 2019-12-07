@@ -70,7 +70,6 @@ class WifiRoomsFragment : Fragment() {
             wifiRoomsViewModel.onWifiRoomItemClicked(wifiRoomSSID)
         })
         binding.wifiRoomsList.adapter = adapter
-
         wifiRoomsViewModel.wifiRooms.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)

@@ -11,11 +11,6 @@ import java.sql.Timestamp
 // https://codelabs.developers.google.com/codelabs/kotlin-android-training-coroutines-and-room/#3
 class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
 
-    /*
-    TESTING
-    val input: MutableLiveData<String> = MutableLiveData()
-     */
-
     // Used to trigger navigation saves navigation state
     private val _navigateToWifiRoom = MutableLiveData<String>()
     // Public gettable val variable to use with mutable live data private variable
@@ -29,6 +24,8 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
         viewModelScope.launch { repository.wifiRoomList(context) }
     }
 
+
+
     fun saveCurrentWifiRoom(ssid: String, bssid: String) {
         val date = java.util.Date()
         if (ssid == "<unknown ssid>" || ssid == "") {
@@ -41,25 +38,6 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
         println("Inserted new wifi room") //TODO remove
     }
 
-    /*
-    TESTING ONLY
-    fun insertWord() {
-        input.value?.let {
-            if (it.isNotEmpty()) {
-                val wifiRoom = WifiRoomItem(it)
-
-                val postItem = PostItem("Test post")
-
-                val userItem = UserItem("Testovaci User")
-                postItem.poster = userItem
-
-                wifiRoom.posts.add(postItem)
-                viewModelScope.launch { repository.insertWifiRoom(wifiRoomItem = wifiRoom) }
-                println("Inserted new wifi room")
-            }
-        }
-        input.value = ""
-    }*/
 
     fun onWifiRoomItemClicked(ssid: String) {
         _navigateToWifiRoom.value = ssid

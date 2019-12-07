@@ -72,7 +72,7 @@ class ContactsFragment : Fragment() {
 
        contactsViewModel.navigateToContactRoom.observe(this, Observer { contact ->
             contact?.let {
-                this.findNavController().navigate(ContactsFragmentDirections.actionContactsFragmentToChatFragment(contact))
+                this.findNavController().navigate(ContactsFragmentDirections.actionContactsFragmentToChatmessagesFragment(contact))
                 contactsViewModel.onContactNavigated() // reset state
             }
         })
