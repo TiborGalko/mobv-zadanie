@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,6 +27,7 @@ import kotlinx.android.synthetic.main.list_messages.message
 class ChatMessagesFragment:Fragment() {
 
     val args:ChatMessagesFragmentArgs by navArgs()
+    var contact = ""
 
     //helper global variable
     companion object {
@@ -42,7 +44,7 @@ class ChatMessagesFragment:Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //(activity as AppCompatActivity).supportActionBar?.title = args.wifiRoomSSID
+        (activity as AppCompatActivity).supportActionBar?.title = "Messaging"
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_chat_messages, container, false
         )
@@ -114,7 +116,7 @@ class ChatMessagesFragment:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         chatContext = view.context
-        chatViewModel.chatList(args.contactId )
+        chatViewModel.chatList(args.contactId)
         send.setOnClickListener{
             val message = message_text.text.toString()
             chatViewModel.sendMessage(args.contactId,message)

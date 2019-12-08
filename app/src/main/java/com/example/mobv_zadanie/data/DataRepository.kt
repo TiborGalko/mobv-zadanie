@@ -69,7 +69,7 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             val response = api.chatList(MessageListRequest(uid, contact, CallAPI.api_key))
             if (response.isSuccessful) {
                 response.body()?.let {
-                    return cache.insertChatMessages(it.map { item -> MessageItem(item.uid,item.contact,item.message,item.time,item.uid_name,item.contact_name,item.uid_fid,item.contact_fid) })
+                    return cache.insertChatMessages(it.map { item ->  MessageItem(item.uid,item.contact,item.message,item.time,item.uid_name,item.contact_name,item.uid_fid,item.contact_fid) })
                 }
             }
         } catch (ex: ConnectException) {
@@ -161,7 +161,7 @@ class DataRepository private constructor(private val cache: LocalCache, private 
                 response.body()?.let {
                     uid = response.body()!!.uid
                     val mes = "User $uid joined the APP"
-                    api.postMessage(PostRequest(uid,"public", mes, CallAPI.api_key ))
+                    api.postMessage(PostRequest(uid,"XsTDHS3C2YneVmEW5Ry7", mes, CallAPI.api_key ))
                     SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
                     SharedPrefWorker.saveString(context, "access", response.body()!!.access)
                     SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
