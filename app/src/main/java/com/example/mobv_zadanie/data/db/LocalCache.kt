@@ -3,6 +3,7 @@ package com.example.mobv_zadanie.data.db
 import androidx.lifecycle.LiveData
 import com.example.mobv_zadanie.data.db.model.*
 
+
 class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
     suspend fun insertWifiRoom(wifiRoomItem: WifiRoomItem) {
         dao.insertWifiRoom(wifiRoomItem)

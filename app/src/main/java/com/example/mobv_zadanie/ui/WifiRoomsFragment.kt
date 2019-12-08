@@ -9,7 +9,6 @@ import android.net.wifi.SupplicantState
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil

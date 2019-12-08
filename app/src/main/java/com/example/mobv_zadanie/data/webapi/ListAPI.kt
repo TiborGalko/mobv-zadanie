@@ -2,6 +2,7 @@ package com.example.mobv_zadanie.data.webapi
 
 import com.example.mobv_zadanie.data.webapi.model.*
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -19,10 +20,10 @@ import retrofit2.http.POST
 interface ListAPI{
 
         @POST("user/create.php")
-        fun userRegister(@Body body: UserRequest): Call<UserResponse>
+        suspend fun userRegister(@Body body: UserRequest): Response<UserResponse>
 
         @POST("user/login.php")
-        fun userLogin(@Body body: UserRequest): Call<UserResponse>
+        suspend fun userLogin(@Body body: UserRequest): Response<UserResponse>
 
         @POST("user/refresh.php")
         fun userRefresh(@Body body: UserRefresh): Call<UserResponse>

@@ -1,6 +1,7 @@
 package com.example.mobv_zadanie.data
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.mobv_zadanie.data.db.LocalCache
 import com.example.mobv_zadanie.data.db.model.ContactItem
@@ -170,4 +171,56 @@ class DataRepository private constructor(private val cache: LocalCache, private 
         }
 
     }
+
+    suspend fun register(name: String, password: String, context: Context): Int {
+
+        val responseCode = 0
+        CallAPI.setAuthentication(false)
+        try {
+            val response = api.userRegister(UserRequest(name, password, CallAPI.api_key))
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
+                    SharedPrefWorker.saveString(context, "access", response.body()!!.access)
+                    SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
+                    //save current user name, password
+                    SharedPrefWorker.saveString(context, "name", name)
+                    SharedPrefWorker.saveString(context, "password", password)
+                }
+            }
+            return response.code()
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+        return responseCode
+    }
+
+    suspend fun login(name: String, password: String, context: Context): Int {
+
+        val responseCode = 0
+        CallAPI.setAuthentication(false)
+        try {
+            val response = api.userLogin(UserRequest(name, password, CallAPI.api_key))
+            Log.i("TAG_API", "login DATAREP response:" +response.code() )
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
+                    SharedPrefWorker.saveString(context, "access", response.body()!!.access)
+                    SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
+                    //save current user name, password
+                    SharedPrefWorker.saveString(context, "name", name)
+                    SharedPrefWorker.saveString(context, "password", password)
+                }
+            }
+            return response.code()
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+        return responseCode
+    }
+
 }
