@@ -180,15 +180,36 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
     }
 
-    suspend fun register(name: String, password: String): Int {
+    suspend fun register(name: String, password: String, context: Context): Int {
 
         val responseCode = 0
         CallAPI.setAuthentication(false)
         try {
             val response = api.userRegister(UserRequest(name, password, CallAPI.api_key))
-            Log.i("TAG_API", "DATAREP response code: " + response.code())
             if (response.isSuccessful) {
                 response.body()?.let {
+                    cache.saveUserSharedPref(context, name, password, response)
+                }
+            }
+            return response.code()
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+        return responseCode
+    }
+
+    suspend fun login(name: String, password: String, context: Context): Int {
+
+        val responseCode = 0
+        CallAPI.setAuthentication(false)
+        try {
+            val response = api.userLogin(UserRequest(name, password, CallAPI.api_key))
+            Log.i("TAG_API", "login DATAREP response:" +response.code() )
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    cache.saveUserSharedPref(context, name, password, response)
                 }
             }
             return response.code()

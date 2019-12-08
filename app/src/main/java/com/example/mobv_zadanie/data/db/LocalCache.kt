@@ -1,7 +1,12 @@
 package com.example.mobv_zadanie.data.db
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import com.example.mobv_zadanie.data.db.model.*
+import com.example.mobv_zadanie.data.util.SharedPrefWorker
+import com.example.mobv_zadanie.data.webapi.model.UserResponse
+import retrofit2.Response
+
 
 class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
     suspend fun insertWifiRoom(wifiRoomItem: WifiRoomItem) {
@@ -88,6 +93,15 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
 
     fun getcontactchatsorted(contact:String): LiveData<List<MessageItem>> {
         return dao.getcontactchatsorted(contact)
+    }
+
+    fun saveUserSharedPref(context: Context, name:String, password: String, response: Response<UserResponse>){
+        SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
+        SharedPrefWorker.saveString(context, "access", response.body()!!.access)
+        SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
+        //save current user name, password
+        SharedPrefWorker.saveString(context, "name", name)
+        SharedPrefWorker.saveString(context, "password", password)
     }
 
 }

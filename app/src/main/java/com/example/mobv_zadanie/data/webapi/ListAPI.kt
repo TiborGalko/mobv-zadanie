@@ -23,7 +23,7 @@ interface ListAPI{
         suspend fun userRegister(@Body body: UserRequest): Response<UserResponse>
 
         @POST("user/login.php")
-        fun userLogin(@Body body: UserRequest): Call<UserResponse>
+        suspend fun userLogin(@Body body: UserRequest): Response<UserResponse>
 
         @POST("user/refresh.php")
         fun userRefresh(@Body body: UserRefresh): Call<UserResponse>

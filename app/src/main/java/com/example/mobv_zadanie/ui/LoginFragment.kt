@@ -11,27 +11,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import androidx.annotation.UiThread
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.airbnb.lottie.LottieAnimationView
 
 import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.Injection
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
-import com.example.mobv_zadanie.data.webapi.CallAPI
-import com.example.mobv_zadanie.data.webapi.model.UserRequest
-import com.example.mobv_zadanie.data.webapi.model.UserResponse
 import com.example.mobv_zadanie.databinding.FragmentLoginBinding
 import com.example.mobv_zadanie.ui.viewModels.LoginViewModel
-import com.example.mobv_zadanie.ui.viewModels.PostsViewModel
 import kotlinx.android.synthetic.main.fragment_login.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 
@@ -74,11 +63,10 @@ class LoginFragment : Fragment() {
         //setting global variable to use in classes that are in this fragment UI, etc. show Toast from other class (not other fragment/activity!!!)
         loginContext = view.context
 
-        btn_register.setOnClickListener { view ->
+        binding.btnRegister.setOnClickListener{
             hideKeyboard()
-
             GlobalScope.launch {
-                val response: Deferred<Int> = async (IO) {loginViewModel.register(edit_login_name.text.toString(), edit_login_passw.text.toString())}
+                val response: Deferred<Int> = async (IO) {loginViewModel.register(edit_login_name.text.toString(), edit_login_passw.text.toString(), loginContext)}
                 val code = response.await()
                 Log.i("TAG_API", "FRAGMENT response code: "+code)
 
@@ -94,9 +82,9 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-
-        btn_login.setOnClickListener { view ->
-            loginUser(edit_login_name.text.toString(), edit_login_passw.text.toString())
+        binding.btnLogin.setOnClickListener{
+            hideKeyboard()
+            login(edit_login_name.text.toString(), edit_login_passw.text.toString())
         }
 
         //perform auto login if set
@@ -106,47 +94,26 @@ class LoginFragment : Fragment() {
             val userName = SharedPrefWorker.getString(loginContext, "autoLogName", "")
             val userPassw = SharedPrefWorker.getString(loginContext, "autoLogPassw", "")
             Log.i("TAG_API", "auto login: "+ userName+ " "+ userPassw)
-            loginUser(userName!!, userPassw!!)
+            login(userName!!, userPassw!!)
         }
     }
 
-    private fun loginUser(name: String, password: String){
-
-        //consumes object UserRequest, produces UserResponse
-        CallAPI.setAuthentication(false)
-        CallAPI.type.userLogin(
-            UserRequest(
-                name,
-                password,
-                CallAPI.api_key
-            )
-        ).enqueue(object: Callback<UserResponse>{
-            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                //Toast.makeText(activity, "Oops, something went wrong: "+t.message, Toast.LENGTH_LONG).show()
-            }
-
-            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                hideKeyboard()
-
-                val animation = view?.findViewById(R.id.lottie_anim_login) as LottieAnimationView
-                animation.visibility = View.VISIBLE
-
-                if (response.code() == 200){
-                    //saving server response values into SharedPref
-                    SharedPrefWorker.saveString(loginContext, "uid", response.body()!!.uid)
-                    SharedPrefWorker.saveString(loginContext, "access", response.body()!!.access)
-                    SharedPrefWorker.saveString(loginContext, "refresh", response.body()!!.refresh)
-                    //save current user name, password
-                    SharedPrefWorker.saveString(loginContext, "name", name)
-                    SharedPrefWorker.saveString(loginContext, "password", password)
-
+    private fun login(name: String, password: String){
+        GlobalScope.launch {
+            val response: Deferred<Int> = async (IO) {loginViewModel.login(name, password, loginContext)}
+            val code = response.await()
+            Log.i("TAG_API", "login FRAGMENT response: "+ code)
+            if (code == 200){
+                activity?.runOnUiThread {
                     playSuccessAnimation(true)
                 }
-                else {
-                    playErrorAnimation(response.code())
+            }
+            else{
+                activity?.runOnUiThread {
+                    playErrorAnimation(code)
                 }
             }
-        })
+        }
     }
 
     private fun playSuccessAnimation(startNewFragment: Boolean){
@@ -178,10 +145,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun playErrorAnimation(response: Int){
-        //lottie_anim_login
-        //val anim = view!!.findViewById(R.id.lottie_anim_login) as LottieAnimationView
         lottie_anim_login.visibility = View.VISIBLE
-
         lottie_anim_login.setAnimation("error.json")
         lottie_anim_login.addAnimatorListener(object: Animator.AnimatorListener {
             override fun onAnimationEnd(animation: Animator?) {
@@ -189,7 +153,7 @@ class LoginFragment : Fragment() {
                 //hide animation layout
                 lottie_anim_login.visibility = View.GONE
                 hideUIComponents(View.VISIBLE)
-                Toast.makeText(activity, "Oops, server code "+response, Toast.LENGTH_LONG).show()
+                //Toast.makeText(activity, "Oops, server code "+response, Toast.LENGTH_LONG).show()
             }
             override fun onAnimationRepeat(animation: Animator?) {}
             override fun onAnimationCancel(animation: Animator?) {}
@@ -213,7 +177,7 @@ class LoginFragment : Fragment() {
         imm?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
 
-    //todo rework logic
+    //maybe save in DataRep / LocalCache
     private fun saveUserLoginOption(){
         if (switch_stay.isChecked) {
             SharedPrefWorker.saveBoolean(loginContext, "autoLoginChecked", true)
