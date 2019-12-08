@@ -23,6 +23,9 @@ class ViewModelFactory(private val repository: DataRepository) : ViewModelProvid
         }else if (modelClass.isAssignableFrom(ChatMessagesViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ChatMessagesViewModel(repository) as T
+        }else if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return LoginViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
