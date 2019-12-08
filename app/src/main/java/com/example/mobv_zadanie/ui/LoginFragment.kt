@@ -65,50 +65,33 @@ class LoginFragment : Fragment() {
 
         binding.btnRegister.setOnClickListener{
             hideKeyboard()
-            GlobalScope.launch {
-                val response: Deferred<Int> = async (IO) {loginViewModel.register(edit_login_name.text.toString(), edit_login_passw.text.toString(), loginContext)}
-                val code = response.await()
-                Log.i("TAG_API", "FRAGMENT response code: "+code)
-
-                if (code == 200){
-                    activity?.runOnUiThread {
-                        playSuccessAnimation(false)
-                    }
-                }
-                else{
-                    activity?.runOnUiThread {
-                        playErrorAnimation(code)
-                    }
-                }
-            }
+            loginORregister("register", edit_login_name.text.toString(), edit_login_passw.text.toString(), false)
         }
         binding.btnLogin.setOnClickListener{
             hideKeyboard()
-            login(edit_login_name.text.toString(), edit_login_passw.text.toString())
+            loginORregister("login", edit_login_name.text.toString(), edit_login_passw.text.toString(), true)
         }
 
         //perform auto login if set
-        val autoLoginDefault = SharedPrefWorker.getString(loginContext,"autoLogName", "Do Not Login automatically")
         val autoLoginValue = SharedPrefWorker.getBoolean(loginContext, "autoLoginChecked")
-        if (autoLoginDefault != "Do Not Login automatically" && autoLoginValue!!){
-            val userName = SharedPrefWorker.getString(loginContext, "autoLogName", "")
-            val userPassw = SharedPrefWorker.getString(loginContext, "autoLogPassw", "")
-            Log.i("TAG_API", "auto login: "+ userName+ " "+ userPassw)
-            login(userName!!, userPassw!!)
+        val autologName = SharedPrefWorker.getString(loginContext,"name", "Do Not Login automatically")
+
+        if (autologName != "Do Not Login automatically" && autoLoginValue!!){
+            val userPassw = SharedPrefWorker.getString(loginContext, "password", "")
+            loginORregister("login", autologName!!, userPassw!!, true)
         }
     }
 
-    private fun login(name: String, password: String){
+    private fun loginORregister(action: String, name: String, password: String, startNewFragment: Boolean){
         GlobalScope.launch {
-            val response: Deferred<Int> = async (IO) {loginViewModel.login(name, password, loginContext)}
+            val response: Deferred<Int> = async (IO) {loginViewModel.pickAPI(action, name, password, loginContext)}
             val code = response.await()
-            Log.i("TAG_API", "login FRAGMENT response: "+ code)
-            if (code == 200){
+            Log.i("TAG_API", action+" FRAGMENT response: "+ code)
+            if (code == 200) {
                 activity?.runOnUiThread {
-                    playSuccessAnimation(true)
+                    playSuccessAnimation(startNewFragment)
                 }
-            }
-            else{
+            } else {
                 activity?.runOnUiThread {
                     playErrorAnimation(code)
                 }
@@ -122,15 +105,12 @@ class LoginFragment : Fragment() {
         lottie_anim_login.addAnimatorListener(object: Animator.AnimatorListener {
             override fun onAnimationEnd(animation: Animator?) {
 
-                //save name and password if auto login checked
-                saveUserLoginOption()
-                if (startNewFragment){
+                if (startNewFragment) {
                     //delete fragment from stack - back press wont load this fragment
                     findNavController().popBackStack(R.id.loginFragment, true)
                     //open new fragment
                     findNavController().navigate(R.id.wifiRoomsFragment)
-                }
-                else {
+                } else {
                     lottie_anim_login.visibility = View.GONE
                     hideUIComponents(View.VISIBLE)
                 }
@@ -169,22 +149,10 @@ class LoginFragment : Fragment() {
         edit_login_passw.visibility = passedCommand
         btn_login.visibility = passedCommand
         btn_register.visibility = passedCommand
-        switch_stay.visibility = passedCommand
     }
 
     private fun hideKeyboard(){
         val imm = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager
         imm?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
-    }
-
-    //maybe save in DataRep / LocalCache
-    private fun saveUserLoginOption(){
-        if (switch_stay.isChecked) {
-            SharedPrefWorker.saveBoolean(loginContext, "autoLoginChecked", true)
-            SharedPrefWorker.saveString(loginContext, "autoLogName", edit_login_name.text.toString())
-            SharedPrefWorker.saveString(loginContext, "autoLogPassw", edit_login_passw.text.toString())
-        } else {
-            SharedPrefWorker.saveString(loginContext, "autoLogName", "Do Not Login automatically")
-        }
     }
 }

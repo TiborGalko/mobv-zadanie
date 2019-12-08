@@ -2,10 +2,7 @@ package com.example.mobv_zadanie.data
 
 import android.content.Context
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LiveData
-import com.airbnb.lottie.LottieAnimationView
-import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.db.LocalCache
 import com.example.mobv_zadanie.data.db.model.ContactItem
 import com.example.mobv_zadanie.data.db.model.MessageItem
@@ -15,11 +12,6 @@ import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.data.webapi.CallAPI
 import com.example.mobv_zadanie.data.webapi.ListAPI
 import com.example.mobv_zadanie.data.webapi.model.*
-import com.example.mobv_zadanie.ui.LoginFragment
-import kotlinx.coroutines.Deferred
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.net.ConnectException
 
 class DataRepository private constructor(private val cache: LocalCache, private val api: ListAPI) {
@@ -188,7 +180,12 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             val response = api.userRegister(UserRequest(name, password, CallAPI.api_key))
             if (response.isSuccessful) {
                 response.body()?.let {
-                    cache.saveUserSharedPref(context, name, password, response)
+                    SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
+                    SharedPrefWorker.saveString(context, "access", response.body()!!.access)
+                    SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
+                    //save current user name, password
+                    SharedPrefWorker.saveString(context, "name", name)
+                    SharedPrefWorker.saveString(context, "password", password)
                 }
             }
             return response.code()
@@ -209,7 +206,12 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             Log.i("TAG_API", "login DATAREP response:" +response.code() )
             if (response.isSuccessful) {
                 response.body()?.let {
-                    cache.saveUserSharedPref(context, name, password, response)
+                    SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
+                    SharedPrefWorker.saveString(context, "access", response.body()!!.access)
+                    SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
+                    //save current user name, password
+                    SharedPrefWorker.saveString(context, "name", name)
+                    SharedPrefWorker.saveString(context, "password", password)
                 }
             }
             return response.code()
