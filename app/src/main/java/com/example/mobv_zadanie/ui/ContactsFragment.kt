@@ -36,6 +36,7 @@ class ContactsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        contactsContext = context!!
         (activity as AppCompatActivity).supportActionBar?.title = "Contacts"
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
