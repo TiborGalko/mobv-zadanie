@@ -14,8 +14,15 @@ import kotlinx.coroutines.launch
 class ChatMessagesViewModel (private val repository: DataRepository) : ViewModel() {
     private val _navigateToPost = MutableLiveData<String>()
 
+    var uidcontact=""
+
     val chat : LiveData<List<MessageItem>>
-        get() = repository.getChatSorted()
+        get() = repository.getcontactSorted(uidcontact)
+
+
+    fun fillvar(uid: String) {
+       uidcontact = uid
+    }
 
 
     fun chatList(uid:String) {
@@ -29,5 +36,7 @@ class ChatMessagesViewModel (private val repository: DataRepository) : ViewModel
     fun logout(context: Context) {
         viewModelScope.launch { repository.logout(context) }
     }
+
+
 
 }

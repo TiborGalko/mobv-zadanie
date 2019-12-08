@@ -61,6 +61,7 @@ class PostsFragment : Fragment() {
 
         postsViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(context!!))
             .get(PostsViewModel::class.java)
+        postsViewModel.fillvar(args.wifiRoomSSID)
         binding.model = postsViewModel
         val adapter = PostAdapter(args.wifiRoomSSID, PostsListener { contactId ->
             postsViewModel.onPostItemClicked(contactId)

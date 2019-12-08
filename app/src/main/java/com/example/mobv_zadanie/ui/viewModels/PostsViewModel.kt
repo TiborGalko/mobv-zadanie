@@ -16,13 +16,13 @@ import kotlinx.coroutines.launch
 class PostsViewModel(private val repository: DataRepository) : ViewModel() {
     private val _navigateToPost = MutableLiveData<String>()
 
-
+    var room = ""
 
     val navigateToPosts
         get() = _navigateToPost
 
     val roomPosts : LiveData<List<PostItem>>
-        get() = repository.getPostsSorted() //TODO toto treba tiez menit asi
+        get() = repository.getroomPosts(room)
 
     fun delete(item: PostItem){
         repository.deletepost(item)
@@ -45,6 +45,10 @@ class PostsViewModel(private val repository: DataRepository) : ViewModel() {
     // Called after navigation is finished to reset navigation state
     fun onPostItemNavigated() {
         _navigateToPost.value = null
+    }
+
+    fun fillvar(ssid:String) {
+       room = ssid
     }
 
 

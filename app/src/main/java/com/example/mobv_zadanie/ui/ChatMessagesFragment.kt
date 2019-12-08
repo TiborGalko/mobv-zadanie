@@ -51,6 +51,7 @@ class ChatMessagesFragment:Fragment() {
 
         chatViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(context!!))
             .get(ChatMessagesViewModel::class.java)
+        chatViewModel.fillvar(args.contactId)
         binding.model = chatViewModel
         val adapter = ChatAdapter(args.contactId)
         binding.recyclerView.adapter = adapter
