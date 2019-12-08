@@ -11,42 +11,24 @@ import kotlinx.coroutines.launch
 
 class ContactsViewModel(private val repository: DataRepository) : ViewModel() {
 
-    /*
-    TESTING ONLY
-    val input: MutableLiveData<String> = MutableLiveData()
-     */
-
     // Used to trigger navigation saves navigation state
     private val _navigateToContactRoom = MutableLiveData<String>()
     // Public gettable val variable to use with mutable live data private variable
     val navigateToContactRoom
         get() = _navigateToContactRoom
 
-
     val contacts : LiveData<List<ContactItem>>
         get() = repository.getContacts()
 
 
     // Get contacts from repository
-    fun listContacts(context: Context) {
-        viewModelScope.launch { repository.contactList(context) }
+    fun listContacts() {
+        viewModelScope.launch { repository.contactList() }
     }
 
-    /*
-    TESTING ONLY
-    fun insertContact() {
-        input.value?.let {
-            if (it.isNotEmpty()) {
-                val contact = UserItem(it)
-                contact.name = it //TODO
-
-                viewModelScope.launch { repository.insertUser(contact) }
-                println("Inserted new contact")
-            }
-        }
-        input.value = ""
+    fun logout(context: Context) {
+        viewModelScope.launch { repository.logout(context) }
     }
-     */
 
     fun onContactClicked(id: String) {
         _navigateToContactRoom.value = id

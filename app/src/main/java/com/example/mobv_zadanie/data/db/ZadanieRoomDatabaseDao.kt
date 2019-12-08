@@ -22,15 +22,15 @@ interface ZadanieRoomDatabaseDao {
     @Delete
     suspend fun deleteWifiRoom(wifiRoomItem: WifiRoomItem)
 
-    @Query("SELECT * FROM wifirooms")
-    fun getWifiRooms(): LiveData<List<WifiRoomItem>>
+    @Query("SELECT * FROM wifirooms WHERE uid=:uid")
+    fun getWifiRooms(uid: String): LiveData<List<WifiRoomItem>>
 
-    @Query("SELECT * FROM wifirooms ORDER BY ssid ASC")
-    fun getWifiRoomsSorted(): LiveData<List<WifiRoomItem>>
+    @Query("SELECT * FROM wifirooms WHERE uid=:uid ORDER BY ssid ASC")
+    fun getWifiRoomsSorted(uid: String): LiveData<List<WifiRoomItem>>
 
     //Contacts
-    @Query("SELECT * FROM contacts")
-    fun getContacts(): LiveData<List<ContactItem>>
+    @Query("SELECT * FROM contacts WHERE uid=:uid")
+    fun getContacts(uid: String): LiveData<List<ContactItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertContacts(contactItems: List<ContactItem>)

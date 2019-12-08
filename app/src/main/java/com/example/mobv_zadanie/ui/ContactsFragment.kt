@@ -78,7 +78,7 @@ class ContactsFragment : Fragment() {
         })
 
         // Load contacts from api and save to database
-        contactsViewModel.listContacts(binding.root.context)
+        contactsViewModel.listContacts()
 
         return binding.root
     }
@@ -113,6 +113,7 @@ class ContactsFragment : Fragment() {
             true
         }
         R.id.action_logout -> {
+            contactsViewModel.logout(contactsContext)
             findNavController().navigate(R.id.loginFragment)
             true
         }

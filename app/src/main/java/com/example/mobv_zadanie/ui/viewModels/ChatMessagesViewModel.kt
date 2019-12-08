@@ -18,12 +18,16 @@ class ChatMessagesViewModel (private val repository: DataRepository) : ViewModel
         get() = repository.getChatSorted()
 
 
-    fun chatList(context: Context, uid:String) {
-        viewModelScope.launch { repository.chatList(context,uid)}
+    fun chatList(uid:String) {
+        viewModelScope.launch { repository.chatList(uid)}
     }
 
-    fun sendMessage(context: Context, id:String, message:String){
-        viewModelScope.launch { repository.postChatMessage(context,id,message) }
+    fun sendMessage(id:String, message:String){
+        viewModelScope.launch { repository.postChatMessage(id,message) }
+    }
+
+    fun logout(context: Context) {
+        viewModelScope.launch { repository.logout(context) }
     }
 
 }

@@ -20,8 +20,8 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
     val wifiRooms : LiveData<List<WifiRoomItem>>
         get() = repository.getWifiRoomsSorted()
 
-    fun listWifiRooms(context: Context) {
-        viewModelScope.launch { repository.wifiRoomList(context) }
+    fun listWifiRooms() {
+        viewModelScope.launch { repository.wifiRoomList() }
     }
 
 
@@ -29,15 +29,16 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
     fun saveCurrentWifiRoom(ssid: String, bssid: String) {
         val date = java.util.Date()
         if (ssid == "<unknown ssid>" || ssid == "") {
-            val wifiRoom = WifiRoomItem(bssid, Timestamp(date.time))
-            viewModelScope.launch { repository.insertWifiRoom(wifiRoomItem = wifiRoom) }
+            viewModelScope.launch { repository.insertWifiRoom(bssid, Timestamp(date.time)) }
         } else {
-            val wifiRoom = WifiRoomItem(ssid, Timestamp(date.time))
-            viewModelScope.launch { repository.insertWifiRoom(wifiRoomItem = wifiRoom) }
+            viewModelScope.launch { repository.insertWifiRoom(ssid, Timestamp(date.time)) }
         }
         println("Inserted new wifi room") //TODO remove
     }
 
+    fun logout(context: Context) {
+        viewModelScope.launch { repository.logout(context) }
+    }
 
     fun onWifiRoomItemClicked(ssid: String) {
         _navigateToWifiRoom.value = ssid
