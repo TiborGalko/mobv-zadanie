@@ -21,7 +21,9 @@ import com.example.mobv_zadanie.data.util.Injection
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.databinding.FragmentPostsBinding
 import com.example.mobv_zadanie.ui.viewModels.PostsViewModel
+import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_posts.*
+import kotlinx.android.synthetic.main.fragment_posts.text
 
 /**
  * A simple [Fragment] subclass.
@@ -60,13 +62,23 @@ class PostsFragment : Fragment() {
         postsViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(context!!))
             .get(PostsViewModel::class.java)
         binding.model = postsViewModel
-        val adapter = PostAdapter(args.wifiRoomSSID)
+        val adapter = PostAdapter(args.wifiRoomSSID, PostsListener { contactId ->
+            postsViewModel.onPostItemClicked(contactId)
+        })
         binding.posts.adapter = adapter
         binding.posts.removeAllViewsInLayout()
         //println(postsViewModel.roomPosts.value)
         postsViewModel.roomPosts.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
+            }
+        })
+
+        postsViewModel.navigateToPosts.observe(this, Observer { contactId ->
+            contactId?.let {
+                this.findNavController().navigate(
+                    PostsFragmentDirections.actionPostsFragmentToChatmessagesFragment(contactId))
+                postsViewModel.onPostItemNavigated() // reset state
             }
         })
 

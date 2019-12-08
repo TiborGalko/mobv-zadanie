@@ -18,7 +18,7 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
         get() = _navigateToWifiRoom
 
     val wifiRooms : LiveData<List<WifiRoomItem>>
-        get() = repository.getWifiRoomsSorted()
+        get() = repository.getWifiRoomsSorted() //TODO toto treba tiez menit asi
 
     fun listWifiRooms() {
         viewModelScope.launch { repository.wifiRoomList() }
