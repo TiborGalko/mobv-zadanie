@@ -22,7 +22,7 @@ class PostsViewModel(private val repository: DataRepository) : ViewModel() {
         get() = _navigateToPost
 
     val roomPosts : LiveData<List<PostItem>>
-        get() = repository.getPostsSorted()
+        get() = repository.getPostsSorted() //TODO toto treba tiez menit asi
 
     fun delete(item: PostItem){
         repository.deletepost(item)
@@ -37,6 +37,15 @@ class PostsViewModel(private val repository: DataRepository) : ViewModel() {
         viewModelScope.launch { repository.postList(room)}
     }
 
+    fun onPostItemClicked(contactId: String) {
+        _navigateToPost.value = contactId
+
+    }
+
+    // Called after navigation is finished to reset navigation state
+    fun onPostItemNavigated() {
+        _navigateToPost.value = null
+    }
 
 
 }

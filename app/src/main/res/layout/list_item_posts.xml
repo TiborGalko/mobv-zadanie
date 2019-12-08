@@ -7,6 +7,9 @@
         <variable
             name="post"
             type="com.example.mobv_zadanie.data.db.model.PostItem"/>
+        <variable
+            name="clickListener"
+            type="com.example.mobv_zadanie.ui.PostsListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,6 +18,7 @@
         android:layout_height="146dp"
         android:background="@drawable/rounded_corner_box"
         android:orientation="vertical"
+        android:onClick="@{() -> clickListener.onClick(post)}"
         >
 
         <ImageView
@@ -30,7 +34,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.099"
             app:srcCompat="@drawable/ico"
-            tools:srcCompat="@drawable/ico" />
+            tools:srcCompat="@drawable/ico"
+            android:src="@drawable/ico"
+            app:postAvatar="@{post}"/>
 
         <TextView
             android:id="@+id/name"
@@ -44,6 +50,7 @@
             app:layout_constraintStart_toEndOf="@+id/avatar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.062"
+            app:postName="@{post}"
             />
 
         <TextView
@@ -58,7 +65,8 @@
             app:layout_constraintHorizontal_bias="0.023"
             app:layout_constraintStart_toEndOf="@+id/avatar"
             app:layout_constraintTop_toBottomOf="@+id/name"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            app:postTime="@{post}"/>
 
         <TextView
             android:id="@+id/message"
@@ -73,6 +81,7 @@
             app:layout_constraintHorizontal_bias="0.12"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/time"
-            app:layout_constraintVertical_bias="0.423" />
+            app:layout_constraintVertical_bias="0.423"
+            app:postMessage="@{post}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

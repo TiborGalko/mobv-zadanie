@@ -9,17 +9,14 @@ import com.example.mobv_zadanie.data.db.model.PostItem
 import com.example.mobv_zadanie.ui.PostAdapter.ViewHolder
 import com.example.mobv_zadanie.databinding.ListItemPostsBinding
 
-class PostAdapter(var room:String) : ListAdapter<PostItem, PostAdapter.ViewHolder>(PostsDiffCallback()){
+class PostAdapter(var room:String, val clickListener: PostsListener) : ListAdapter<PostItem, PostAdapter.ViewHolder>(PostsDiffCallback()){
 
     class ViewHolder private constructor(val binding: ListItemPostsBinding) : RecyclerView.ViewHolder(binding.root) {
         // Calls bindings from BindingUtils
-        fun bind(item: PostItem, room:String) {
-            if(room==item.roomdid){
-                binding.time.text = item.time.toString()
-                binding.message.text = item.message
-                binding.name.text = item.name
-                binding.executePendingBindings()
-            }
+        fun bind(item: PostItem, clickListener: PostsListener) {
+            binding.post = item
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
         }
 
         companion object {
@@ -35,19 +32,23 @@ class PostAdapter(var room:String) : ListAdapter<PostItem, PostAdapter.ViewHolde
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item,room)
+        holder.bind(item, clickListener)
     }
 
 }
 
 
-class PostsDiffCallback() : DiffUtil.ItemCallback<PostItem>() {
+class PostsDiffCallback : DiffUtil.ItemCallback<PostItem>() {
     override fun areItemsTheSame(oldItem: PostItem, newItem: PostItem): Boolean {
-        return oldItem.time == newItem.time
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: PostItem, newItem: PostItem): Boolean {
         return oldItem == newItem
     }
 
+}
+
+class PostsListener(val clickListener: (contact_uid: String) -> Unit) {
+    fun onClick(post: PostItem) = clickListener(post.uid)
 }
