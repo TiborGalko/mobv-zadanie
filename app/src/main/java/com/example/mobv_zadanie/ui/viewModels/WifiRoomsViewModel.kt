@@ -20,8 +20,8 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
     val wifiRooms : LiveData<List<WifiRoomItem>>
         get() = repository.getWifiRoomsSorted() //TODO toto treba tiez menit asi
 
-    fun listWifiRooms() {
-        viewModelScope.launch { repository.wifiRoomList() }
+    fun listWifiRooms(context: Context) {
+        viewModelScope.launch { repository.wifiRoomList(context) }
     }
 
 

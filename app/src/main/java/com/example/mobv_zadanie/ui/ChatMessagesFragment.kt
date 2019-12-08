@@ -116,10 +116,10 @@ class ChatMessagesFragment:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         chatContext = view.context
-        chatViewModel.chatList(args.contactId)
+        chatViewModel.chatList(args.contactId, chatContext)
         send.setOnClickListener{
             val message = message_text.text.toString()
-            chatViewModel.sendMessage(args.contactId,message)
+            chatViewModel.sendMessage(args.contactId,message, chatContext)
             hideKeyboard()
         }
     }

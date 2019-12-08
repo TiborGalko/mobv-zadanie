@@ -8,8 +8,8 @@ import kotlinx.coroutines.launch
 
 class ChatViewModel(private val repository: DataRepository) : ViewModel() {
 
-    fun sendMessage(room:String, message:String){
-        viewModelScope.launch { repository.postMessage(room,message) }
+    fun sendMessage(room:String, message:String,context: Context){
+        viewModelScope.launch { repository.postMessage(room,message,context) }
     }
 
     fun logout(context: Context) {

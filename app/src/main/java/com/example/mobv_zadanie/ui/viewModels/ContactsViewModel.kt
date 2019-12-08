@@ -22,8 +22,8 @@ class ContactsViewModel(private val repository: DataRepository) : ViewModel() {
 
 
     // Get contacts from repository
-    fun listContacts() {
-        viewModelScope.launch { repository.contactList() }
+    fun listContacts(context: Context) {
+        viewModelScope.launch { repository.contactList(context) }
     }
 
     fun logout(context: Context) {

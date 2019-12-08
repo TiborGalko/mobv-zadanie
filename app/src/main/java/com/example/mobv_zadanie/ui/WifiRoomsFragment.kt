@@ -127,7 +127,7 @@ class WifiRoomsFragment : Fragment() {
         //pass context to use for SharedPrefWorker
         wifiRoomsContext = view.context
 
-        wifiRoomsViewModel.listWifiRooms()
+        wifiRoomsViewModel.listWifiRooms(wifiRoomsContext)
     }
 
     //enable options menu in this fragment

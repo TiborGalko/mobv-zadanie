@@ -34,7 +34,7 @@ class PostsViewModel(private val repository: DataRepository) : ViewModel() {
 
     fun listPosts(context: Context) {
         val room = SharedPrefWorker.getString(context, "room", "ssid").toString()
-        viewModelScope.launch { repository.postList(room)}
+        viewModelScope.launch { repository.postList(room,context)}
     }
 
     fun onPostItemClicked(contactId: String) {
