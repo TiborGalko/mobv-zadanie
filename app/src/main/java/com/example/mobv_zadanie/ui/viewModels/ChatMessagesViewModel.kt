@@ -25,12 +25,12 @@ class ChatMessagesViewModel (private val repository: DataRepository) : ViewModel
     }
 
 
-    fun chatList(uid:String) {
-        viewModelScope.launch { repository.chatList(uid)}
+    fun chatList(uid:String,context: Context) {
+        viewModelScope.launch { repository.chatList(uid,context)}
     }
 
-    fun sendMessage(id:String, message:String){
-        viewModelScope.launch { repository.postChatMessage(id,message) }
+    fun sendMessage(id:String, message:String,context: Context){
+        viewModelScope.launch { repository.postChatMessage(id,message,context) }
     }
 
     fun logout(context: Context) {

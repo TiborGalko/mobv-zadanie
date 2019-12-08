@@ -79,7 +79,7 @@ class ContactsFragment : Fragment() {
         })
 
         // Load contacts from api and save to database
-        contactsViewModel.listContacts()
+        contactsViewModel.listContacts(contactsContext)
 
         return binding.root
     }

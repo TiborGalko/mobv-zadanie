@@ -59,7 +59,7 @@ class ChatFragment : Fragment() {
         val room = SharedPrefWorker.getString(ChatContext, "room", "public").toString()
         post.setOnClickListener{
             val message = text.text.toString()
-            chatViewModel.sendMessage(room,message)
+            chatViewModel.sendMessage(room,message, ChatContext)
             hideKeyboard()
             this.findNavController().navigate(
                 ChatFragmentDirections.actionChatFragmentToPostsFragment(room)

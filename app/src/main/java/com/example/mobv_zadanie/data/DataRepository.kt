@@ -44,9 +44,11 @@ class DataRepository private constructor(private val cache: LocalCache, private 
     fun getContacts() : LiveData<List<ContactItem>> = cache.getContacts(uid)
 
     // Loading rooms from api and saving to database which triggers LiveData and all that stuff
-    suspend fun wifiRoomList() {
+    suspend fun wifiRoomList(context: Context) {
+        refresh(context)
         CallAPI.setAuthentication(true)
         try {
+
             val response = api.roomList(RoomListRequest(uid, CallAPI.api_key))
             if (response.isSuccessful) {
                 response.body()?.let {
@@ -63,7 +65,8 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
     }
 
-    suspend fun chatList(contact:String) {
+    suspend fun chatList(contact:String,context: Context) {
+        refresh(context)
         CallAPI.setAuthentication(true)
         try {
             val response = api.chatList(MessageListRequest(uid, contact, CallAPI.api_key))
@@ -82,7 +85,8 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
     }
 
-    suspend fun postList(room:String) {
+    suspend fun postList(room:String,context: Context) {
+        refresh(context)
         CallAPI.setAuthentication(true)
         try {
             val response = api.postList(PostListRequest(uid, room, CallAPI.api_key))
@@ -101,7 +105,8 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
     }
 
-    suspend fun postMessage(room:String, message:String) {
+    suspend fun postMessage(room:String, message:String,context: Context) {
+        refresh(context)
         CallAPI.setAuthentication(true)
         try {
             api.postMessage(PostRequest(uid, room, message, CallAPI.api_key))
@@ -115,7 +120,8 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
     }
 
-    suspend fun postChatMessage(contact:String, message:String) {
+    suspend fun postChatMessage(contact:String, message:String,context: Context) {
+        refresh(context)
         CallAPI.setAuthentication(true)
         try {
             api.postChatMessage(MessageRequest(uid, contact, message, CallAPI.api_key))
@@ -132,7 +138,8 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
 
     // Loading contacts from api and saving to database which triggers LiveData and all that stuff
-    suspend fun contactList() {
+    suspend fun contactList(context: Context) {
+        refresh(context)
         CallAPI.setAuthentication(true)
         try {
             val response = api.contactList(ContactListRequest(uid, CallAPI.api_key))
@@ -189,7 +196,6 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             if (response.isSuccessful) {
                 response.body()?.let {
                     uid = response.body()!!.uid
-
                     SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
                     SharedPrefWorker.saveString(context, "access", response.body()!!.access)
                     SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
@@ -205,6 +211,27 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             ex.printStackTrace()
         }
         return responseCode
+    }
+
+    fun refresh(context: Context){
+        CallAPI.setAuthentication(true)
+        val refresh = SharedPrefWorker.getString(context,"refresh", "").toString()
+        try {
+        val response = api.userRefresh(UserRefresh(uid,refresh,CallAPI.api_key))
+        if (response.isSuccessful) {
+            response.body()?.let {
+                uid = response.body()!!.uid
+                SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
+                SharedPrefWorker.saveString(context, "access", response.body()!!.access)
+                SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
+                //save current user name, password
+            }
+        }
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
     }
 
 
