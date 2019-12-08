@@ -28,9 +28,13 @@ class PostsViewModel(private val repository: DataRepository) : ViewModel() {
         repository.deletepost(item)
     }
 
-    fun listPosts(context: Context, binding: FragmentPostsBinding) {
+    fun logout(context: Context) {
+        viewModelScope.launch { repository.logout(context) }
+    }
+
+    fun listPosts(context: Context) {
         val room = SharedPrefWorker.getString(context, "room", "ssid").toString()
-        viewModelScope.launch { repository.postList(context,room)}
+        viewModelScope.launch { repository.postList(room)}
     }
 
 

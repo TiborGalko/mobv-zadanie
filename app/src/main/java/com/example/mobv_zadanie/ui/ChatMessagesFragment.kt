@@ -99,6 +99,7 @@ class ChatMessagesFragment:Fragment() {
             true
         }
         R.id.action_logout -> {
+            chatViewModel.logout(chatContext)
             findNavController().navigate(R.id.loginFragment)
             true
         }
@@ -112,10 +113,10 @@ class ChatMessagesFragment:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         chatContext = view.context
-        chatViewModel.chatList(view.context,args.contactId )
+        chatViewModel.chatList(args.contactId )
         send.setOnClickListener{
             val message = message_text.text.toString()
-            chatViewModel.sendMessage(chatContext,args.contactId,message)
+            chatViewModel.sendMessage(args.contactId,message)
             hideKeyboard()
         }
     }

@@ -13,8 +13,11 @@ import com.example.mobv_zadanie.data.webapi.CallAPI
 import com.example.mobv_zadanie.data.webapi.ListAPI
 import com.example.mobv_zadanie.data.webapi.model.*
 import java.net.ConnectException
+import java.sql.Timestamp
 
 class DataRepository private constructor(private val cache: LocalCache, private val api: ListAPI) {
+
+    private lateinit var uid: String
 
     companion object {
         const val TAG = "DataRepository"
@@ -28,30 +31,26 @@ class DataRepository private constructor(private val cache: LocalCache, private 
     }
 
 
-    fun getWifiRooms() : LiveData<List<WifiRoomItem>> = cache.getWifiRooms()
-    fun getWifiRoomsSorted() : LiveData<List<WifiRoomItem>> = cache.getWifiRoomsSorted()
+    fun getWifiRooms() : LiveData<List<WifiRoomItem>> = cache.getWifiRooms(uid)
+    fun getWifiRoomsSorted() : LiveData<List<WifiRoomItem>> = cache.getWifiRoomsSorted(uid)
     fun getPostsSorted() : LiveData<List<PostItem>> = cache.getPostssorted()
     fun getChatSorted() : LiveData<List<MessageItem>> = cache.getChatsorted()
     fun getroomPosts(roomid:String) : LiveData<List<PostItem>> = cache.getroomPosts(roomid)
     fun getcontactSorted(contact:String) : LiveData<List<MessageItem>> = cache.getcontactchatsorted(contact)
-    suspend fun insertWifiRoom(wifiRoomItem: WifiRoomItem) = cache.insertWifiRoom(wifiRoomItem)
+    suspend fun insertWifiRoom(ssid: String, time: Timestamp) = cache.insertWifiRoom(WifiRoomItem(ssid, time, uid))
     suspend fun updateWifiRoom(wifiRoomItem: WifiRoomItem) = cache.updateWifiRoom(wifiRoomItem)
     fun deletepost(postItem: PostItem) = cache.deletePost(postItem)
 
-    fun getContacts() : LiveData<List<ContactItem>> = cache.getContacts()
+    fun getContacts() : LiveData<List<ContactItem>> = cache.getContacts(uid)
 
     // Loading rooms from api and saving to database which triggers LiveData and all that stuff
-    suspend fun wifiRoomList(context: Context) {
+    suspend fun wifiRoomList() {
         CallAPI.setAuthentication(true)
         try {
-            val uid: String = SharedPrefWorker.getString(context, "uid", "not_found").toString()
-            if (uid == "not_found") {
-                return
-            }
             val response = api.roomList(RoomListRequest(uid, CallAPI.api_key))
             if (response.isSuccessful) {
                 response.body()?.let {
-                    return cache.insertWifiRooms(it.map { item -> WifiRoomItem(item.roomid, item.time) })
+                    return cache.insertWifiRooms(it.map { item -> WifiRoomItem(item.roomid, item.time, uid) })
                 }
             }
         } catch (ex: ConnectException) {
@@ -64,13 +63,9 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
     }
 
-    suspend fun chatList(context: Context, contact:String) {
+    suspend fun chatList(contact:String) {
         CallAPI.setAuthentication(true)
         try {
-            val uid: String = SharedPrefWorker.getString(context, "uid", "not_found").toString()
-            if (uid == "not_found") {
-                return
-            }
             val response = api.chatList(MessageListRequest(uid, contact, CallAPI.api_key))
             if (response.isSuccessful) {
                 response.body()?.let {
@@ -87,13 +82,9 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
     }
 
-    suspend fun postList(context: Context, room:String) {
+    suspend fun postList(room:String) {
         CallAPI.setAuthentication(true)
         try {
-            val uid: String = SharedPrefWorker.getString(context, "uid", "not_found").toString()
-            if (uid == "not_found") {
-                return
-            }
             val response = api.postList(PostListRequest(uid, room, CallAPI.api_key))
             if (response.isSuccessful) {
                 response.body()?.let {
@@ -110,13 +101,9 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
     }
 
-    suspend fun postMessage(context: Context, room:String, message:String) {
+    suspend fun postMessage(room:String, message:String) {
         CallAPI.setAuthentication(true)
         try {
-            val uid: String = SharedPrefWorker.getString(context, "uid", "not_found").toString()
-            if (uid == "not_found") {
-                return
-            }
             api.postMessage(PostRequest(uid, room, message, CallAPI.api_key))
         } catch (ex: ConnectException) {
             ex.printStackTrace()
@@ -128,13 +115,9 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
     }
 
-    suspend fun postChatMessage(context: Context, contact:String, message:String) {
+    suspend fun postChatMessage(contact:String, message:String) {
         CallAPI.setAuthentication(true)
         try {
-            val uid: String = SharedPrefWorker.getString(context, "uid", "not_found").toString()
-            if (uid == "not_found") {
-                return
-            }
             api.postChatMessage(MessageRequest(uid, contact, message, CallAPI.api_key))
         } catch (ex: ConnectException) {
             ex.printStackTrace()
@@ -149,17 +132,13 @@ class DataRepository private constructor(private val cache: LocalCache, private 
 
 
     // Loading contacts from api and saving to database which triggers LiveData and all that stuff
-    suspend fun contactList(context: Context) {
+    suspend fun contactList() {
         CallAPI.setAuthentication(true)
         try {
-            val uid: String = SharedPrefWorker.getString(context, "uid", "not_found").toString()
-            if (uid == "not_found") {
-                return
-            }
             val response = api.contactList(ContactListRequest(uid, CallAPI.api_key))
             if (response.isSuccessful) {
                 response.body()?.let {
-                    return cache.insertContacts(it.map { item -> ContactItem(item.name, item.id) })
+                    return cache.insertContacts(it.map { item -> ContactItem(item.name, item.id, uid) })
                 }
             }
         } catch (ex: ConnectException) {
@@ -180,6 +159,8 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             val response = api.userRegister(UserRequest(name, password, CallAPI.api_key))
             if (response.isSuccessful) {
                 response.body()?.let {
+                    uid = response.body()!!.uid
+
                     SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
                     SharedPrefWorker.saveString(context, "access", response.body()!!.access)
                     SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
@@ -206,6 +187,8 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             Log.i("TAG_API", "login DATAREP response:" +response.code() )
             if (response.isSuccessful) {
                 response.body()?.let {
+                    uid = response.body()!!.uid
+
                     SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
                     SharedPrefWorker.saveString(context, "access", response.body()!!.access)
                     SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
@@ -221,6 +204,19 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             ex.printStackTrace()
         }
         return responseCode
+    }
+
+
+    // Clears shared preferences and uid
+    fun logout(context: Context) {
+        uid = ""
+
+        SharedPrefWorker.saveString(context, "uid", "")
+        SharedPrefWorker.saveString(context, "access", "")
+        SharedPrefWorker.saveString(context, "refresh", "")
+        //save current user name, password
+        SharedPrefWorker.saveString(context, "name", "")
+        SharedPrefWorker.saveString(context, "password", "")
     }
 
 }

@@ -125,7 +125,7 @@ class WifiRoomsFragment : Fragment() {
         //pass context to use for SharedPrefWorker
         wifiRoomsContext = view.context
 
-        wifiRoomsViewModel.listWifiRooms(view.context)
+        wifiRoomsViewModel.listWifiRooms()
     }
 
     //enable options menu in this fragment
@@ -151,6 +151,8 @@ class WifiRoomsFragment : Fragment() {
             true
         }
         R.id.action_logout -> {
+            wifiRoomsViewModel.logout(wifiRoomsContext)
+
             findNavController().navigate(R.id.loginFragment)
             true
         }

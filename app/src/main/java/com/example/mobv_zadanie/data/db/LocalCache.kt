@@ -21,17 +21,17 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
         dao.deleteWifiRoom(wifiRoomItem)
     }
 
-    fun getWifiRooms(): LiveData<List<WifiRoomItem>> {
-        return dao.getWifiRooms()
+    fun getWifiRooms(uid: String): LiveData<List<WifiRoomItem>> {
+        return dao.getWifiRooms(uid)
     }
 
-    fun getWifiRoomsSorted(): LiveData<List<WifiRoomItem>> {
-        return dao.getWifiRoomsSorted()
+    fun getWifiRoomsSorted(uid: String): LiveData<List<WifiRoomItem>> {
+        return dao.getWifiRoomsSorted(uid)
     }
 
     // Contacts implementations
-    fun getContacts(): LiveData<List<ContactItem>> {
-        return dao.getContacts()
+    fun getContacts(uid: String): LiveData<List<ContactItem>> {
+        return dao.getContacts(uid)
     }
 
     suspend fun insertContacts(contactItems: List<ContactItem>) {

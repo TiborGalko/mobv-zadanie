@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
  * Entity data class representing contacts
  * */
 @Entity(tableName = "contacts")
-data class ContactItem(val name: String, @PrimaryKey val id: String) {
+data class ContactItem(val name: String, @PrimaryKey val id: String, val uid: String) {
     override fun toString(): String {
         return "ContactItem(name='$name', id=$id)"
     }

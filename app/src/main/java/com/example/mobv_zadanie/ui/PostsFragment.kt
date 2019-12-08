@@ -106,6 +106,8 @@ class PostsFragment : Fragment() {
             true
         }
         R.id.action_logout -> {
+            postsViewModel.logout(roomPostContext)
+
             findNavController().navigate(R.id.loginFragment)
             true
         }
@@ -140,7 +142,7 @@ class PostsFragment : Fragment() {
                 }
             }
         }
-        postsViewModel.listPosts(view.context, binding)
+        postsViewModel.listPosts(view.context)
     }
 
     override fun onResume() {
