@@ -26,7 +26,7 @@ interface ListAPI{
         suspend fun userLogin(@Body body: UserRequest): Response<UserResponse>
 
         @POST("user/refresh.php")
-        fun userRefresh(@Body body: UserRefresh): Response<UserResponse>
+        suspend fun userRefresh(@Body body: UserRefresh): Response<UserResponse>
 
         @POST("room/list.php")
         suspend fun roomList(@Body body: RoomListRequest): Response<List<RoomListResponse>>

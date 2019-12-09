@@ -113,11 +113,11 @@ class WifiRoomsFragment : Fragment() {
         val wifiManager = context!!.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val wifiInfo = wifiManager.connectionInfo
         if (wifiInfo.supplicantState == SupplicantState.COMPLETED) {
-            val ssid = wifiInfo.ssid//Here you can access your SSID
+            val ssid = wifiInfo.ssid //Here you can access your SSID
             val bssid = wifiInfo.bssid
             println(bssid)
             println(ssid)
-            wifiRoomsViewModel.saveCurrentWifiRoom(ssid, bssid)
+            wifiRoomsViewModel.saveCurrentWifiRoom(ssid.substring(1, ssid.length-1), bssid)
         }
     }
 

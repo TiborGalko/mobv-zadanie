@@ -213,8 +213,7 @@ class DataRepository private constructor(private val cache: LocalCache, private 
         return responseCode
     }
 
-    fun refresh(context: Context){
-        CallAPI.setAuthentication(true)
+    suspend fun refresh(context: Context){
         val refresh = SharedPrefWorker.getString(context,"refresh", "").toString()
         try {
         val response = api.userRefresh(UserRefresh(uid,refresh,CallAPI.api_key))
