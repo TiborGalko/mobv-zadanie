@@ -148,7 +148,7 @@ class PostsFragment : Fragment() {
                     add_button.visibility = View.INVISIBLE
                 }
             } else {
-                if (ssid==args.wifiRoomSSID){
+                if (ssid.substring(1, ssid.length-1) == args.wifiRoomSSID){
                     text.visibility = View.INVISIBLE
                 }else{
                     add_button.visibility = View.INVISIBLE
