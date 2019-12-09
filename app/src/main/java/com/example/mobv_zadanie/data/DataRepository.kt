@@ -36,7 +36,7 @@ class DataRepository private constructor(private val cache: LocalCache, private 
     fun getPostsSorted() : LiveData<List<PostItem>> = cache.getPostssorted()
     fun getChatSorted() : LiveData<List<MessageItem>> = cache.getChatsorted()
     fun getroomPosts(roomid:String) : LiveData<List<PostItem>> = cache.getroomPosts(roomid)
-    fun getcontactSorted(contact:String) : LiveData<List<MessageItem>> = cache.getcontactchatsorted(contact)
+    fun getcontactSorted(contact:String) : LiveData<List<MessageItem>> = cache.getcontactchatsorted(contact, uid)
     suspend fun insertWifiRoom(ssid: String, time: Timestamp) = cache.insertWifiRoom(WifiRoomItem(ssid, time, uid))
     suspend fun updateWifiRoom(wifiRoomItem: WifiRoomItem) = cache.updateWifiRoom(wifiRoomItem)
     fun deletepost(postItem: PostItem) = cache.deletePost(postItem)

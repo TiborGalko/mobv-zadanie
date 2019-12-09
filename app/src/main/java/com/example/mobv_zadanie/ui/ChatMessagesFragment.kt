@@ -20,6 +20,15 @@ import com.example.mobv_zadanie.data.util.Injection
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.databinding.FragmentChatMessagesBinding
 import com.example.mobv_zadanie.ui.viewModels.ChatMessagesViewModel
+import com.giphy.sdk.core.models.Media
+import com.giphy.sdk.core.models.enums.RenditionType
+import com.giphy.sdk.ui.GPHContentType
+import com.giphy.sdk.ui.GPHSettings
+import com.giphy.sdk.ui.GiphyCoreUI
+import com.giphy.sdk.ui.themes.GridType
+import com.giphy.sdk.ui.themes.LightTheme
+import com.giphy.sdk.ui.views.GPHMediaView
+import com.giphy.sdk.ui.views.GiphyDialogFragment
 import kotlinx.android.synthetic.main.fragment_chat_messages.*
 import kotlinx.android.synthetic.main.list_messages.*
 import kotlinx.android.synthetic.main.list_messages.message
@@ -121,6 +130,36 @@ class ChatMessagesFragment:Fragment() {
             val message = message_text.text.toString()
             chatViewModel.sendMessage(args.contactId,message, chatContext)
             hideKeyboard()
+        }
+
+        send_giphy.setOnClickListener {
+            GiphyCoreUI.configure(context!!, "qS2O0jkAE54Wem1ly9p9B3SOFrC5ibU3")
+            GiphyDialogFragment.newInstance().show(fragmentManager!!,"giphy_dialog")
+            var settings = GPHSettings(gridType = GridType.waterfall, theme = LightTheme, dimBackground = true)
+            settings.gridType = GridType.waterfall
+            settings.mediaTypeConfig = arrayOf(GPHContentType.gif)
+            settings.renditionType = RenditionType.fixedWidth
+            settings.renditionType = RenditionType.fixedHeight
+            settings.confirmationRenditionType = RenditionType.original
+
+            val gifsDialog = GiphyDialogFragment.newInstance(settings)
+            gifsDialog.show(fragmentManager!!, "gifs_dialog")
+
+            gifsDialog.gifSelectionListener = object: GiphyDialogFragment.GifSelectionListener {
+                override fun onGifSelected(media: Media) {
+                    val mediaView = GPHMediaView(context!!)
+                    mediaView.setMedia(media, RenditionType.original)
+                    val message = ("gif:" + media.id)
+                    chatViewModel.sendMessage(args.contactId,message, ChatFragment.ChatContext)
+                    hideKeyboard()
+                    findNavController().navigate(
+                      ChatFragmentDirections.actionChatFragmentToPostsFragment(args.contactId)
+                       )
+                }
+                override fun onDismissed() {
+                    //Your user dismissed the dialog without selecting a GIF
+                }
+            }
         }
     }
     private fun hideKeyboard(){

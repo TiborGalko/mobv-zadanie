@@ -44,6 +44,21 @@
             app:layout_constraintTop_toBottomOf="@+id/recyclerView"
             app:layout_constraintVertical_bias="0.032" />
 
+        <Button
+            android:id="@+id/send_giphy"
+            android:layout_width="62dp"
+            android:layout_height="53dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="2dp"
+            android:text="GIFs"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.42"
+            app:layout_constraintStart_toEndOf="@+id/message_text"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+            app:layout_constraintVertical_bias="0.254" />
+
         <EditText
             android:id="@+id/message_text"
             android:layout_width="263dp"

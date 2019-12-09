@@ -87,8 +87,8 @@ class LocalCache(private val dao: ZadanieRoomDatabaseDao) {
         return dao.getChatSorted()
     }
 
-    fun getcontactchatsorted(contact:String): LiveData<List<MessageItem>> {
-        return dao.getcontactchatsorted(contact)
+    fun getcontactchatsorted(contact:String, uid:String): LiveData<List<MessageItem>> {
+        return dao.getcontactchatsorted(contact, uid)
     }
 
 }

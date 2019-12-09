@@ -77,8 +77,8 @@ interface ZadanieRoomDatabaseDao {
     @Query("SELECT * FROM messages ORDER BY id DESC")
     fun getChatSorted(): LiveData<List<MessageItem>>
 
-    @Query("SELECT * FROM messages WHERE contact =:contact ORDER BY id DESC")
-    fun getcontactchatsorted(contact:String): LiveData<List<MessageItem>>
+    @Query("SELECT * FROM messages WHERE ((contact =:contact AND uid=:uid) OR (contact=:uid AND uid=:contact )) ORDER BY id DESC")
+    fun getcontactchatsorted(contact:String,uid: String): LiveData<List<MessageItem>>
 
 
 }
