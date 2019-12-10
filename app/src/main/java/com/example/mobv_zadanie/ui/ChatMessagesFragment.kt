@@ -135,7 +135,7 @@ class ChatMessagesFragment:Fragment() {
         send_giphy.setOnClickListener {
             GiphyCoreUI.configure(context!!, "qS2O0jkAE54Wem1ly9p9B3SOFrC5ibU3")
             GiphyDialogFragment.newInstance().show(fragmentManager!!,"giphy_dialog")
-            var settings = GPHSettings(gridType = GridType.waterfall, theme = LightTheme, dimBackground = true)
+            val settings = GPHSettings(gridType = GridType.waterfall, theme = LightTheme, dimBackground = true)
             settings.gridType = GridType.waterfall
             settings.mediaTypeConfig = arrayOf(GPHContentType.gif)
             settings.renditionType = RenditionType.fixedWidth
@@ -150,10 +150,10 @@ class ChatMessagesFragment:Fragment() {
                     val mediaView = GPHMediaView(context!!)
                     mediaView.setMedia(media, RenditionType.original)
                     val message = ("gif:" + media.id)
-                    chatViewModel.sendMessage(args.contactId,message, ChatFragment.ChatContext)
+                    chatViewModel.sendMessage(args.contactId,message, chatContext)
                     hideKeyboard()
                     findNavController().navigate(
-                      ChatFragmentDirections.actionChatFragmentToPostsFragment(args.contactId)
+                      ChatMessagesFragmentDirections.actionChatmessageFragmentToChatmessageFragment(args.contactId)
                        )
                 }
                 override fun onDismissed() {
