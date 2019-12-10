@@ -56,8 +56,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.42"
             app:layout_constraintStart_toEndOf="@+id/message_text"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-            app:layout_constraintVertical_bias="0.254" />
+            app:layout_constraintTop_toBottomOf="@+id/send"
+            app:layout_constraintVertical_bias="0.01" />
 
         <EditText
             android:id="@+id/message_text"

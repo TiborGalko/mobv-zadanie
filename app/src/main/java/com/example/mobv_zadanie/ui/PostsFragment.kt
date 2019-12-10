@@ -138,25 +138,41 @@ class PostsFragment : Fragment() {
         SharedPrefWorker.saveString(roomPostContext, "room",args.wifiRoomSSID )
         val wifiManager = context!!.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val wifiInfo = wifiManager.connectionInfo
-        if (wifiInfo.supplicantState == SupplicantState.COMPLETED) {
-            val ssid = wifiInfo.ssid//Here you can access your SSID
-            val bssid = wifiInfo.bssid
-            if (ssid == "<unknown ssid>" || ssid == "") {
-                if (bssid==args.wifiRoomSSID){
-                    text.visibility = View.INVISIBLE
-                }else{
-                    add_button.visibility = View.INVISIBLE
-                }
-            } else {
-                if (ssid.substring(1, ssid.length-1) == args.wifiRoomSSID){
-                    text.visibility = View.INVISIBLE
-                }else{
-                    add_button.visibility = View.INVISIBLE
+        if( wifiInfo.networkId == -1){
+            if(args.wifiRoomSSID=="XsTDHS3C2YneVmEW5Ry7"){
+                text.visibility = View.INVISIBLE
+            }else{
+                add_button.visibility = View.INVISIBLE
+            }
+        }else{
+            if (wifiInfo.supplicantState == SupplicantState.COMPLETED) {
+                val ssid = wifiInfo.ssid//Here you can access your SSID
+                val bssid = wifiInfo.bssid
+                if (ssid == "<unknown ssid>" || ssid == "") {
+                    if (bssid==args.wifiRoomSSID){
+                        text.visibility = View.INVISIBLE
+                    }else{
+                        add_button.visibility = View.INVISIBLE
+                    }
+                } else if(args.wifiRoomSSID=="XsTDHS3C2YneVmEW5Ry7"){
+                    if(args.wifiRoomSSID=="XsTDHS3C2YneVmEW5Ry7"){
+                        text.visibility = View.INVISIBLE
+                    }else{
+                        add_button.visibility = View.INVISIBLE
+                    }
+                } else {
+                    if (ssid.substring(1, ssid.length-1) == args.wifiRoomSSID){
+                        text.visibility = View.INVISIBLE
+                    }else{
+                        add_button.visibility = View.INVISIBLE
+                    }
                 }
             }
         }
         postsViewModel.listPosts(view.context)
     }
+
+
 
     override fun onResume() {
         super.onResume()
