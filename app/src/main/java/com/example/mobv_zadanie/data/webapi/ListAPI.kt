@@ -1,8 +1,6 @@
 package com.example.mobv_zadanie.data.webapi
 
 import com.example.mobv_zadanie.data.webapi.model.*
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -44,5 +42,5 @@ interface ListAPI{
         suspend fun postChatMessage(@Body body: MessageRequest)
 
         @POST("contact/read.php")
-        suspend fun chatList(@Body body: MessageListRequest): Response<List<MessageListReposne>>
+        suspend fun chatList(@Body body: MessageListRequest): Response<List<MessageListResponse>>
 }

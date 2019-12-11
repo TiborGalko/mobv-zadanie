@@ -10,7 +10,7 @@
             type="com.example.mobv_zadanie.data.db.model.WifiRoomItem"/>
         <variable
             name="clickListener"
-            type="com.example.mobv_zadanie.ui.WifiRoomsListener" />
+            type="com.example.mobv_zadanie.ui.adapters.WifiRoomsListener" />
     </data>
 
     <!-- This is layout for one item in wifi room recycler view -->

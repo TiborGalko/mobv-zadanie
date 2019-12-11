@@ -1,4 +1,4 @@
-package com.example.mobv_zadanie.ui
+package com.example.mobv_zadanie.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mobv_zadanie.data.db.model.ContactItem
 import com.example.mobv_zadanie.databinding.ListItemContactsBinding
 
-class ContactsAdapter(val clickListener: ContactsListener) : ListAdapter<ContactItem, ContactsAdapter.ViewHolder>(ContactsDiffCallback()) {
+class ContactsAdapter(val clickListener: ContactsListener) : ListAdapter<ContactItem, ContactsAdapter.ViewHolder>(
+    ContactsDiffCallback()
+) {
 
     class ViewHolder private constructor(val binding: ListItemContactsBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -28,11 +30,11 @@ class ContactsAdapter(val clickListener: ContactsListener) : ListAdapter<Contact
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
-    override fun onBindViewHolder(holder: ContactsAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position) // getItem gets ContactsItem from ListAdapter
         holder.bind(item, clickListener)
     }

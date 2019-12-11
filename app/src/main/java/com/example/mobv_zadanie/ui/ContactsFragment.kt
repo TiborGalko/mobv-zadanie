@@ -16,6 +16,8 @@ import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.Injection
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.databinding.FragmentContactsBinding
+import com.example.mobv_zadanie.ui.adapters.ContactsAdapter
+import com.example.mobv_zadanie.ui.adapters.ContactsListener
 import com.example.mobv_zadanie.ui.viewModels.ContactsViewModel
 
 /**
@@ -61,9 +63,10 @@ class ContactsFragment : Fragment() {
         binding.model = contactsViewModel
 
         // attach recycler view adapter
-        val adapter = ContactsAdapter(ContactsListener { id ->
-            contactsViewModel.onContactClicked(id)
-        })
+        val adapter =
+            ContactsAdapter(ContactsListener { id ->
+                contactsViewModel.onContactClicked(id)
+            })
         binding.contactsList.adapter = adapter
 
         contactsViewModel.contacts.observe(viewLifecycleOwner, Observer {

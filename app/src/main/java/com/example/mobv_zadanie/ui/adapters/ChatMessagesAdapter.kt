@@ -1,4 +1,4 @@
-package com.example.mobv_zadanie.ui
+package com.example.mobv_zadanie.ui.adapters
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -12,26 +12,16 @@ import com.example.mobv_zadanie.data.db.model.MessageItem
 import com.example.mobv_zadanie.databinding.ListMessagesBinding
 
 
-class ChatAdapter(var myuid:String) : ListAdapter<MessageItem, ChatAdapter.ViewHolder>(ChatDiffCallback()){
+class ChatMessagesAdapter() : ListAdapter<MessageItem, ChatMessagesAdapter.ViewHolder>(
+    ChatDiffCallback()
+){
 
     class ViewHolder private constructor(val binding: ListMessagesBinding) : RecyclerView.ViewHolder(binding.root) {
         val gif = "gif:"
         // Calls bindings from BindingUtils
-        fun bind(item: MessageItem, uid:String) {
-            binding.name.text = item.uid_name
-            binding.myMessage.text = item.message
+        fun bind(item: MessageItem) {
+            binding.message = item
             binding.executePendingBindings()
-
-            var message = item.message
-            if(item.message.contains("gif:")){
-                message = message.removePrefix(gif)
-                println(message)
-                Glide.with(binding.imageView)
-                    .load(Uri.parse("https://media2.giphy.com/media/" + message+ "/200w.gif"))
-                    .into(binding.imageView)
-                binding.myMessage.visibility = View.INVISIBLE
-                binding.imageView.visibility  = View.VISIBLE
-            }
         }
 
         companion object {
@@ -48,14 +38,14 @@ class ChatAdapter(var myuid:String) : ListAdapter<MessageItem, ChatAdapter.ViewH
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position) // getItem gets WifiRoomItem from ListAdapter
-        holder.bind(item, myuid)
+        val item = getItem(position) // getItem gets MessageItem from ListAdapter
+        holder.bind(item)
     }
 }
 
 class ChatDiffCallback() : DiffUtil.ItemCallback<MessageItem>() {
     override fun areItemsTheSame(oldItem: MessageItem, newItem: MessageItem): Boolean {
-        return oldItem.time == newItem.time
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: MessageItem, newItem: MessageItem): Boolean {

@@ -12,7 +12,7 @@ import com.example.mobv_zadanie.R
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var alert: AlertDialog
+    private var alert: AlertDialog ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +33,20 @@ class MainActivity : AppCompatActivity() {
                 " Android location services must be turned on to get right SSID.")
             .setCancelable(false)
             .setPositiveButton("Yes") {
-                    dialog, which -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    _, _ -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
             .setNegativeButton("No") {
-                    dialog, which -> dialog.cancel()
+                    dialog, _ -> dialog.cancel()
             }
         alert = builder.create()
-        alert.show();
+        alert?.show();
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        alert.dismiss()
+        if (alert != null) {
+            alert?.dismiss()
+        }
     }
 }

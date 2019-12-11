@@ -9,7 +9,7 @@
             type="com.example.mobv_zadanie.data.db.model.PostItem"/>
         <variable
             name="clickListener"
-            type="com.example.mobv_zadanie.ui.PostsListener" />
+            type="com.example.mobv_zadanie.ui.adapters.PostsListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,8 +35,7 @@
             app:layout_constraintVertical_bias="0.099"
             app:srcCompat="@drawable/ico"
             tools:srcCompat="@drawable/ico"
-            android:src="@drawable/ico"
-            app:postAvatar="@{post}"/>
+            android:src="@drawable/ico"/>
 
         <TextView
             android:id="@+id/name"
@@ -95,6 +94,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/time"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            app:postGifImage="@{post.message}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

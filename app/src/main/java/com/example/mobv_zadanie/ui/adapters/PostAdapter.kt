@@ -1,4 +1,4 @@
-package com.example.mobv_zadanie.ui
+package com.example.mobv_zadanie.ui.adapters
 
 import android.content.Context
 import android.net.Uri
@@ -10,26 +10,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mobv_zadanie.data.db.model.PostItem
-import com.example.mobv_zadanie.ui.PostAdapter.ViewHolder
 import com.example.mobv_zadanie.databinding.ListItemPostsBinding
 
-class PostAdapter(var context: Context, var room:String, val clickListener: PostsListener) : ListAdapter<PostItem, PostAdapter.ViewHolder>(PostsDiffCallback()){
+class PostAdapter(var context: Context, var room:String, val clickListener: PostsListener) : ListAdapter<PostItem, PostAdapter.ViewHolder>(
+    PostsDiffCallback()
+){
 
     class ViewHolder private constructor(val binding: ListItemPostsBinding) : RecyclerView.ViewHolder(binding.root) {
-        val gif = "gif:"
         // Calls bindings from BindingUtils
         fun bind(item: PostItem, clickListener: PostsListener) {
             binding.post = item
-            var message = item.message
-            if(item.message.contains("gif:")){
-                message = message.removePrefix(gif)
-                println(message)
-                Glide.with(binding.imageView)
-                    .load(Uri.parse("https://media2.giphy.com/media/" + message+ "/200w.gif"))
-                    .into(binding.imageView)
-                binding.message.visibility = View.INVISIBLE
-                binding.imageView.visibility  = View.VISIBLE
-            }
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }
