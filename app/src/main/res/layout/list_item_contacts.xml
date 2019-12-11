@@ -10,7 +10,7 @@
             type="com.example.mobv_zadanie.data.db.model.ContactItem"/>
         <variable
             name="clickListener"
-            type="com.example.mobv_zadanie.ui.ContactsListener" />
+            type="com.example.mobv_zadanie.ui.adapters.ContactsListener" />
     </data>
 
     <!-- This is layout for one item in contacts recycler view -->

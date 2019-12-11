@@ -21,6 +21,8 @@ import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.Injection
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.databinding.FragmentWifiRoomsBinding
+import com.example.mobv_zadanie.ui.adapters.WifiRoomsAdapter
+import com.example.mobv_zadanie.ui.adapters.WifiRoomsListener
 import com.example.mobv_zadanie.ui.viewModels.WifiRoomsViewModel
 
 /**
@@ -67,9 +69,10 @@ class WifiRoomsFragment : Fragment() {
         binding.model = wifiRoomsViewModel
 
         // attach recycler view adapter
-        val adapter = WifiRoomsAdapter(WifiRoomsListener { wifiRoomSSID ->
-            wifiRoomsViewModel.onWifiRoomItemClicked(wifiRoomSSID)
-        })
+        val adapter =
+            WifiRoomsAdapter(WifiRoomsListener { wifiRoomSSID ->
+                wifiRoomsViewModel.onWifiRoomItemClicked(wifiRoomSSID)
+            })
         binding.wifiRoomsList.adapter = adapter
         wifiRoomsViewModel.wifiRooms.observe(viewLifecycleOwner, Observer {
             it?.let {

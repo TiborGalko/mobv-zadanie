@@ -1,4 +1,4 @@
-package com.example.mobv_zadanie.ui
+package com.example.mobv_zadanie.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mobv_zadanie.data.db.model.WifiRoomItem
 import com.example.mobv_zadanie.databinding.ListItemWifiRoomBinding
 
-class WifiRoomsAdapter(val clickListener: WifiRoomsListener) : ListAdapter<WifiRoomItem, WifiRoomsAdapter.ViewHolder>(WifiRoomsDiffCallback()) {
+class WifiRoomsAdapter(val clickListener: WifiRoomsListener) : ListAdapter<WifiRoomItem, WifiRoomsAdapter.ViewHolder>(
+    WifiRoomsDiffCallback()
+) {
 
     class ViewHolder private constructor(val binding: ListItemWifiRoomBinding) : RecyclerView.ViewHolder(binding.root) {
         // Calls bindings from BindingUtils
@@ -28,7 +30,9 @@ class WifiRoomsAdapter(val clickListener: WifiRoomsListener) : ListAdapter<WifiR
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
+        return ViewHolder.from(
+            parent
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

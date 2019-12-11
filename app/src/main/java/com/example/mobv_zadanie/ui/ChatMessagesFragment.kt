@@ -19,6 +19,7 @@ import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.Injection
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.databinding.FragmentChatMessagesBinding
+import com.example.mobv_zadanie.ui.adapters.ChatMessagesAdapter
 import com.example.mobv_zadanie.ui.viewModels.ChatMessagesViewModel
 import com.giphy.sdk.core.models.Media
 import com.giphy.sdk.core.models.enums.RenditionType
@@ -30,8 +31,6 @@ import com.giphy.sdk.ui.themes.LightTheme
 import com.giphy.sdk.ui.views.GPHMediaView
 import com.giphy.sdk.ui.views.GiphyDialogFragment
 import kotlinx.android.synthetic.main.fragment_chat_messages.*
-import kotlinx.android.synthetic.main.list_messages.*
-import kotlinx.android.synthetic.main.list_messages.message
 
 class ChatMessagesFragment:Fragment() {
 
@@ -44,10 +43,8 @@ class ChatMessagesFragment:Fragment() {
         lateinit var chatContext: Context
     }
 
-    private lateinit var chatViewModel: ChatMessagesViewModel
+    private lateinit var chatMessagesViewModel: ChatMessagesViewModel
     private lateinit var binding: FragmentChatMessagesBinding
-
-    private val LOCATION = 1 // used for identifying permission call
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,33 +57,23 @@ class ChatMessagesFragment:Fragment() {
         binding.lifecycleOwner = this
 
 
-        chatViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(context!!))
+        chatMessagesViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(context!!))
             .get(ChatMessagesViewModel::class.java)
-        chatViewModel.fillvar(args.contactId)
-        binding.model = chatViewModel
-        val adapter = ChatAdapter(args.contactId)
-        binding.recyclerView.adapter = adapter
+        chatMessagesViewModel.fillvar(args.contactId)
+        binding.model = chatMessagesViewModel
+
+        val adapter = ChatMessagesAdapter()
+        binding.chatMessagesList.adapter = adapter
         Log.i("FRAG_LOG" , args.contactId)
-        binding.recyclerView.removeAllViewsInLayout()
+        //binding.chatMessagesList.removeAllViewsInLayout()
         //println(postsViewModel.roomPosts.value)
-        chatViewModel.chat.observe(viewLifecycleOwner, Observer {
+        chatMessagesViewModel.chat.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
             }
         })
 
         return binding.root
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && requestCode == LOCATION) {
-            //User allowed the location and you can read it now
-            println("Allowed")
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,7 +98,7 @@ class ChatMessagesFragment:Fragment() {
             true
         }
         R.id.action_logout -> {
-            chatViewModel.logout(chatContext)
+            chatMessagesViewModel.logout(chatContext)
             findNavController().navigate(R.id.loginFragment)
             true
         }
@@ -125,11 +112,11 @@ class ChatMessagesFragment:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         chatContext = view.context
-        chatViewModel.chatList(args.contactId, chatContext)
+        chatMessagesViewModel.chatList(args.contactId, chatContext)
         send.setOnClickListener{
             val message = message_text.text.toString()
-            chatViewModel.sendMessage(args.contactId,message, chatContext)
-            hideKeyboard()
+            chatMessagesViewModel.sendMessage(args.contactId,message, chatContext)
+            binding.messageText.text?.clear()
         }
 
         send_giphy.setOnClickListener {
@@ -150,11 +137,7 @@ class ChatMessagesFragment:Fragment() {
                     val mediaView = GPHMediaView(context!!)
                     mediaView.setMedia(media, RenditionType.original)
                     val message = ("gif:" + media.id)
-                    chatViewModel.sendMessage(args.contactId,message, chatContext)
-                    hideKeyboard()
-                    findNavController().navigate(
-                      ChatMessagesFragmentDirections.actionChatmessageFragmentToChatmessageFragment(args.contactId)
-                       )
+                    chatMessagesViewModel.sendMessage(args.contactId,message, chatContext)
                 }
                 override fun onDismissed() {
                     //Your user dismissed the dialog without selecting a GIF

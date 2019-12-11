@@ -110,6 +110,7 @@ class DataRepository private constructor(private val cache: LocalCache, private 
         CallAPI.setAuthentication(true)
         try {
             api.postMessage(PostRequest(uid, room, message, CallAPI.api_key))
+            postList(room, context)
         } catch (ex: ConnectException) {
             ex.printStackTrace()
             return
@@ -125,6 +126,7 @@ class DataRepository private constructor(private val cache: LocalCache, private 
         CallAPI.setAuthentication(true)
         try {
             api.postChatMessage(MessageRequest(uid, contact, message, CallAPI.api_key))
+            chatList(contact, context)
         } catch (ex: ConnectException) {
             ex.printStackTrace()
             return

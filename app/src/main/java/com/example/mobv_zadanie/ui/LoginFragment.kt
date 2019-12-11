@@ -64,11 +64,11 @@ class LoginFragment : Fragment() {
         loginContext = view.context
 
         binding.btnRegister.setOnClickListener{
-            hideKeyboard()
+            //hideKeyboard()
             loginORregister("register", edit_login_name.text.toString(), edit_login_passw.text.toString(), false)
         }
         binding.btnLogin.setOnClickListener{
-            hideKeyboard()
+            //hideKeyboard()
             loginORregister("login", edit_login_name.text.toString(), edit_login_passw.text.toString(), true)
         }
 

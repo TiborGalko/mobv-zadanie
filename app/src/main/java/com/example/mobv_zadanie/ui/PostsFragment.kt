@@ -20,8 +20,9 @@ import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.Injection
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.databinding.FragmentPostsBinding
+import com.example.mobv_zadanie.ui.adapters.PostAdapter
+import com.example.mobv_zadanie.ui.adapters.PostsListener
 import com.example.mobv_zadanie.ui.viewModels.PostsViewModel
-import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_posts.*
 import kotlinx.android.synthetic.main.fragment_posts.text
 
@@ -63,9 +64,12 @@ class PostsFragment : Fragment() {
             .get(PostsViewModel::class.java)
         postsViewModel.fillvar(args.wifiRoomSSID)
         binding.model = postsViewModel
-        val adapter = PostAdapter(context!!, args.wifiRoomSSID, PostsListener { contactId ->
-            postsViewModel.onPostItemClicked(contactId)
-        })
+        val adapter = PostAdapter(
+            context!!,
+            args.wifiRoomSSID,
+            PostsListener { contactId ->
+                postsViewModel.onPostItemClicked(contactId)
+            })
         binding.posts.adapter = adapter
         binding.posts.removeAllViewsInLayout()
         //println(postsViewModel.roomPosts.value)
@@ -171,18 +175,4 @@ class PostsFragment : Fragment() {
         }
         postsViewModel.listPosts(view.context)
     }
-
-
-
-    override fun onResume() {
-        super.onResume()
-        binding.posts.removeAllViewsInLayout()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding.posts.removeAllViewsInLayout()
-    }
-
-
 }
