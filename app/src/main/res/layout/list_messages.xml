@@ -12,7 +12,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_corner_box">
+        android:background="@drawable/rounded_corner_box"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/name"
@@ -56,7 +58,7 @@
             app:layout_constraintTop_toBottomOf="@+id/name"
             tools:srcCompat="@tools:sample/avatars"
             app:messageGifImage="@{message.message}"
-            />
+            android:contentDescription="@string/gif_image_desc" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
