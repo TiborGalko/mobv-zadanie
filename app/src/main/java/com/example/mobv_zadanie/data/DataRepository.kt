@@ -168,9 +168,6 @@ class DataRepository private constructor(private val cache: LocalCache, private 
             val response = api.userRegister(UserRequest(name, password, CallAPI.api_key))
             if (response.isSuccessful) {
                 response.body()?.let {
-                    uid = response.body()!!.uid
-                    val mes = "User $uid joined the APP"
-                    api.postMessage(PostRequest(uid,"XsTDHS3C2YneVmEW5Ry7", mes, CallAPI.api_key ))
                     SharedPrefWorker.saveString(context, "uid", response.body()!!.uid)
                     SharedPrefWorker.saveString(context, "access", response.body()!!.access)
                     SharedPrefWorker.saveString(context, "refresh", response.body()!!.refresh)
