@@ -71,7 +71,7 @@ class PostsFragment : Fragment() {
                 postsViewModel.onPostItemClicked(contactId)
             })
         binding.posts.adapter = adapter
-        binding.posts.removeAllViewsInLayout()
+        //binding.posts.removeAllViewsInLayout()
         //println(postsViewModel.roomPosts.value)
         postsViewModel.roomPosts.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -138,7 +138,7 @@ class PostsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomPostContext = view.context
-        binding.posts.removeAllViewsInLayout()
+//        binding.posts.removeAllViewsInLayout()
         SharedPrefWorker.saveString(roomPostContext, "room",args.wifiRoomSSID )
         val wifiManager = context!!.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val wifiInfo = wifiManager.connectionInfo
@@ -165,7 +165,7 @@ class PostsFragment : Fragment() {
                         add_button.visibility = View.INVISIBLE
                     }
                 } else {
-                    if (ssid.substring(1, ssid.length-1) == args.wifiRoomSSID){
+                    if (prepareSsid(ssid) == args.wifiRoomSSID){
                         text.visibility = View.INVISIBLE
                     }else{
                         add_button.visibility = View.INVISIBLE
@@ -174,5 +174,15 @@ class PostsFragment : Fragment() {
             }
         }
         postsViewModel.listPosts(view.context)
+    }
+
+    private fun prepareSsid(ssid: String) : String {
+        var safeSSID = ssid
+        if (ssid.startsWith("\"") and ssid.endsWith("\"")) {
+            safeSSID = ssid.substring(1, ssid.length - 1)
+        }
+        val regex = Regex("[^a-zA-Z0-9-_.~%]")
+        safeSSID = regex.replace(safeSSID, "_")
+        return safeSSID
     }
 }
