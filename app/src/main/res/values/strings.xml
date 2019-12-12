@@ -5,4 +5,18 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="contacts">Contacts</string>
     <string name="wifi_rooms">Wifi Rooms</string>
+    <string name="postButton">Post</string>
+    <string name="gifsButton">Gifs</string>
+    <string name="post_hint">Post your message or gif image.</string>
+    <string name="send_chat_message_btn">Send</string>
+    <string name="send_gifs_chat_btn">GIFs</string>
+    <string name="hint_chat_message">Enter your message or gif.</string>
+    <string name="post_warning_text">Pre prispievanie do tejto room sa pripojte na správnu wifi.</string>
+    <string name="avatar_image_desc">Avatar image</string>
+    <string name="textview_placeholder">TextView</string>
+    <string name="gif_image_desc">Gif image</string>
+    <string name="name">name</string>
+    <string name="password">password</string>
+    <string name="login">login</string>
+    <string name="register">register</string>
 </resources>
