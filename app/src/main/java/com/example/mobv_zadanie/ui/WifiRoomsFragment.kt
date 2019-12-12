@@ -96,7 +96,7 @@ class WifiRoomsFragment : Fragment() {
         } else {//Permission already granted
             saveCurrentWifiRoom()
         }
-
+        wifiRoomsViewModel.saveCurrentWifiRoom("XsTDHS3C2YneVmEW5Ry7")
         return binding.root
     }
 
