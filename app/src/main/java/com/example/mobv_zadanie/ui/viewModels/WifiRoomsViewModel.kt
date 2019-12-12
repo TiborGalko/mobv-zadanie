@@ -26,14 +26,9 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
 
 
 
-    fun saveCurrentWifiRoom(ssid: String, bssid: String) {
+    fun saveCurrentWifiRoom(roomId: String) {
         val date = java.util.Date()
-        if (ssid == "unknown ssid" || ssid == "") {
-            viewModelScope.launch { repository.insertWifiRoom(bssid, Timestamp(date.time)) }
-        } else {
-            viewModelScope.launch { repository.insertWifiRoom(ssid, Timestamp(date.time)) }
-        }
-        println("Inserted new wifi room") //TODO remove
+        viewModelScope.launch { repository.insertWifiRoom(roomId, Timestamp(date.time)) }
     }
 
     fun logout(context: Context) {

@@ -120,8 +120,22 @@ class WifiRoomsFragment : Fragment() {
             val bssid = wifiInfo.bssid
             println(bssid)
             println(ssid)
-            wifiRoomsViewModel.saveCurrentWifiRoom(ssid.substring(1, ssid.length-1), bssid)
+            if (ssid == "<unknown ssid>" || ssid == "") {
+                wifiRoomsViewModel.saveCurrentWifiRoom(bssid)
+            } else {
+                wifiRoomsViewModel.saveCurrentWifiRoom(prepareSsid(ssid))
+            }
         }
+    }
+
+    private fun prepareSsid(ssid: String) : String {
+        var safeSSID = ssid
+        if (ssid.startsWith("\"") and ssid.endsWith("\"")) {
+            safeSSID = ssid.substring(1, ssid.length - 1)
+        }
+        val regex = Regex("[^a-zA-Z0-9-_.~%]")
+        safeSSID = regex.replace(safeSSID, "_")
+        return safeSSID
     }
 
     //after fragment onCreateView method
