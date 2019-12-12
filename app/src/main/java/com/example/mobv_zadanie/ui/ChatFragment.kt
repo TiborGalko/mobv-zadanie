@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.NavigationUI
 
 import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.Injection
@@ -52,6 +53,11 @@ class ChatFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_chat, container, false
         )
+
+        // Setting navController for NavigationDrawer
+        val navController = this.findNavController()
+        NavigationUI.setupWithNavController(binding.navView, navController)
+
         binding.lifecycleOwner = this
 
         chatViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(context!!))

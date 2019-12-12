@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 
 import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.data.util.Injection
@@ -44,6 +45,10 @@ class ContactsFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_contacts, container, false
         )
+
+        // Setting navController for NavigationDrawer
+        val navController = this.findNavController()
+        NavigationUI.setupWithNavController(binding.navView, navController)
 
         // Specify the current activity as the lifecycle owner of the binding.
         // This is necessary so that the binding can observe LiveData updates.
