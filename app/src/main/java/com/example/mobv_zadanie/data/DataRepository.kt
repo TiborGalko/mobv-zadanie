@@ -245,4 +245,19 @@ class DataRepository private constructor(private val cache: LocalCache, private 
         SharedPrefWorker.saveString(context, "password", "")
     }
 
+    // Used to post new firebase token to
+    suspend fun postFirebaseId(fid: String) {
+        CallAPI.setAuthentication(true)
+
+        val api = CallAPI.create()
+        try {
+            api.postUserFid(UserFidRequest(uid, fid, CallAPI.api_key))
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+            return
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return
+        }
+    }
 }

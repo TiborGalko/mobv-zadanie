@@ -11,6 +11,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.databinding.ActivityMainBinding
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +44,22 @@ class MainActivity : AppCompatActivity() {
             }
         alert = builder.create()
         alert?.show();
+    }
+
+    // Has to check if google play api is available because of Firebase
+    override fun onResume() {
+        super.onResume()
+
+        val result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(applicationContext)
+        if(result == ConnectionResult.SUCCESS) {
+            Log.i("TAG_API", "Google play api is available. No problems.")
+        } else if (result == ConnectionResult.SERVICE_MISSING
+            || result == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED
+            || result == ConnectionResult.SERVICE_DISABLED) {
+
+            Log.e("TAG_API", "Google play api error.")
+            GoogleApiAvailability.getInstance().getErrorDialog(this, result, 0).show()
+        }
     }
 
     override fun onDestroy() {

@@ -43,4 +43,7 @@ interface ListAPI{
 
         @POST("contact/read.php")
         suspend fun chatList(@Body body: MessageListRequest): Response<List<MessageListResponse>>
+
+        @POST("user/fid.php")
+        suspend fun postUserFid(@Body body: UserFidRequest)
 }

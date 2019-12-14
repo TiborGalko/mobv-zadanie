@@ -24,7 +24,9 @@ class WifiRoomsViewModel(private val repository: DataRepository) : ViewModel() {
         viewModelScope.launch { repository.wifiRoomList(context) }
     }
 
-
+    fun postFirebaseId(fid: String) {
+        viewModelScope.launch { repository.postFirebaseId(fid) }
+    }
 
     fun saveCurrentWifiRoom(roomId: String) {
         val date = java.util.Date()

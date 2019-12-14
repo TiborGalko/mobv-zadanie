@@ -20,4 +20,5 @@
     <string name="login">login</string>
     <string name="register">register</string>
     <string name="navigation_header_desc">Navigation header</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 </resources>

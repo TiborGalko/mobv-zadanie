@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "178870338901",
+    "firebase_url": "https://mobv-zadanie.firebaseio.com",
+    "project_id": "mobv-zadanie",
+    "storage_bucket": "mobv-zadanie.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178870338901:android:8c1f676490907306fe9bdc",
+        "android_client_info": {
+          "package_name": "com.example.mobv_zadanie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "178870338901-0dshuao3ag0gfr32u0fdip4lo1jt3393.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mobv_zadanie",
+            "certificate_hash": "a2ce455b1b9fb8bf0bbdeb5fcc3d6e751b561bc5"
+          }
+        },
+        {
+          "client_id": "178870338901-uqhu6rc65rse162cle6l704gam40iocv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgKdHQvtsxFaTzEbka-ieTZ-4cESCUV6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "178870338901-uqhu6rc65rse162cle6l704gam40iocv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
