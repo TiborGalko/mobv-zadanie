@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -86,7 +87,7 @@ class LoginFragment : Fragment() {
         GlobalScope.launch {
             val response: Deferred<Int> = async (IO) {loginViewModel.pickAPI(action, name, password, loginContext)}
             val code = response.await()
-            Log.i("TAG_API", action+" FRAGMENT response: "+ code)
+            //Log.i("TAG_API", action+" FRAGMENT response: "+ code)
             if (code == 200) {
                 activity?.runOnUiThread {
                     playSuccessAnimation(startNewFragment)
@@ -145,6 +146,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun hideUIComponents(passedCommand: Int){
+        img.visibility = passedCommand
         edit_login_name.visibility = passedCommand
         edit_login_passw.visibility = passedCommand
         btn_login.visibility = passedCommand
