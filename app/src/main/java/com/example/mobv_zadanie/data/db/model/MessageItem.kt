@@ -13,6 +13,6 @@ data class MessageItem(var uid: String, var contact:String, var message:String, 
     var id: Int = 0
 
     override fun toString(): String {
-        return "MessageItem(id=$id, uid:$uid, contact:$contact, message:$message, time:$time, uid_name:$uid_name, contact_name:$contact_name, uid_fid:$uid_fid, cintact_fid:$contact_fid)"
+        return "MessageItem(id=$id, uid:$uid, contact:$contact, message:$message, time:$time, uid_name:$uid_name, contact_name:$contact_name, uid_fid:$uid_fid, contact_fid:$contact_fid)"
     }
 }

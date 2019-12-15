@@ -1,8 +1,11 @@
 package com.example.mobv_zadanie.ui
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
@@ -11,6 +14,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.example.mobv_zadanie.R
 import com.example.mobv_zadanie.databinding.ActivityMainBinding
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +24,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            val channelId = getString(R.string.default_notification_channel_id)
+            val channelName = getString(R.string.default_notification_channel_name)
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager?.createNotificationChannel(NotificationChannel(channelId,
+                channelName, NotificationManager.IMPORTANCE_LOW)
+            )
+        }
 
         Log.i("TAG_API", "main activity called")
 
@@ -42,6 +57,22 @@ class MainActivity : AppCompatActivity() {
             }
         alert = builder.create()
         alert?.show();
+    }
+
+    // Has to check if google play api is available because of Firebase
+    override fun onResume() {
+        super.onResume()
+
+        val result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(applicationContext)
+        if(result == ConnectionResult.SUCCESS) {
+            Log.i("TAG_API", "Google play api is available. No problems.")
+        } else if (result == ConnectionResult.SERVICE_MISSING
+            || result == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED
+            || result == ConnectionResult.SERVICE_DISABLED) {
+
+            Log.e("TAG_API", "Google play api error.")
+            GoogleApiAvailability.getInstance().getErrorDialog(this, result, 0).show()
+        }
     }
 
     override fun onDestroy() {

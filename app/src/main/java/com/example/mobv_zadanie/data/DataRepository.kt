@@ -8,6 +8,9 @@ import com.example.mobv_zadanie.data.db.model.ContactItem
 import com.example.mobv_zadanie.data.db.model.MessageItem
 import com.example.mobv_zadanie.data.db.model.PostItem
 import com.example.mobv_zadanie.data.db.model.WifiRoomItem
+import com.example.mobv_zadanie.data.firebaseapi.FcmListAPI
+import com.example.mobv_zadanie.data.firebaseapi.model.Data
+import com.example.mobv_zadanie.data.firebaseapi.model.MessageSendRequest
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.data.webapi.CallAPI
 import com.example.mobv_zadanie.data.webapi.ListAPI
@@ -15,30 +18,26 @@ import com.example.mobv_zadanie.data.webapi.model.*
 import java.net.ConnectException
 import java.sql.Timestamp
 
-class DataRepository private constructor(private val cache: LocalCache, private val api: ListAPI) {
+class DataRepository private constructor(private val cache: LocalCache, private val api: ListAPI, private val fcmAPI: FcmListAPI) {
 
-    private lateinit var uid: String
+    lateinit var uid: String
 
     companion object {
         const val TAG = "DataRepository"
         @Volatile
         private var INSTANCE: DataRepository ?= null
 
-        fun getInstance(cache: LocalCache, api: ListAPI): DataRepository =
+        fun getInstance(cache: LocalCache, api: ListAPI, fcmAPI: FcmListAPI): DataRepository =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: DataRepository(cache, api).also { INSTANCE = it }
+                INSTANCE ?: DataRepository(cache, api, fcmAPI).also { INSTANCE = it }
             }
     }
 
 
-    fun getWifiRooms() : LiveData<List<WifiRoomItem>> = cache.getWifiRooms(uid)
     fun getWifiRoomsSorted() : LiveData<List<WifiRoomItem>> = cache.getWifiRoomsSorted(uid)
-    fun getPostsSorted() : LiveData<List<PostItem>> = cache.getPostssorted()
-    fun getChatSorted() : LiveData<List<MessageItem>> = cache.getChatsorted()
     fun getroomPosts(roomid:String) : LiveData<List<PostItem>> = cache.getroomPosts(roomid)
     fun getcontactSorted(contact:String) : LiveData<List<MessageItem>> = cache.getcontactchatsorted(contact, uid)
     suspend fun insertWifiRoom(ssid: String, time: Timestamp) = cache.insertWifiRoom(WifiRoomItem(ssid, time, uid))
-    suspend fun updateWifiRoom(wifiRoomItem: WifiRoomItem) = cache.updateWifiRoom(wifiRoomItem)
     fun deletepost(postItem: PostItem) = cache.deletePost(postItem)
 
     fun getContacts() : LiveData<List<ContactItem>> = cache.getContacts(uid)
@@ -245,4 +244,42 @@ class DataRepository private constructor(private val cache: LocalCache, private 
         SharedPrefWorker.saveString(context, "password", "")
     }
 
+    // Used to post new firebase token to
+    suspend fun postFirebaseId(fid: String) {
+        CallAPI.setAuthentication(true)
+        try {
+            api.postUserFid(UserFidRequest(uid, fid, CallAPI.api_key))
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+            return
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return
+        }
+    }
+
+    suspend fun postFcmMessage(topic: String, message: String, senderName: String) {
+        try {
+            // There is difference if you use /topics/ and
+            if (senderName.contains("Room")) {
+                fcmAPI.postFcmMessage(
+                    MessageSendRequest(
+                        "/topics/$topic", Data(
+                            message, "Nová správa od $senderName"
+                        )
+                    )
+                )
+            } else {
+                fcmAPI.postFcmMessage(
+                    MessageSendRequest( topic, Data( message, "Nová správa od $senderName"))
+                )
+            }
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+            return
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return
+        }
+    }
 }

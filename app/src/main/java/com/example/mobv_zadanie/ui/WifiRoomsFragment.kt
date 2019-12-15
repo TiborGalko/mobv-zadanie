@@ -8,7 +8,9 @@ import android.content.pm.PackageManager
 import android.net.wifi.SupplicantState
 import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -19,12 +21,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 
 import com.example.mobv_zadanie.R
+import com.example.mobv_zadanie.data.service.MessagingService
 import com.example.mobv_zadanie.data.util.Injection
 import com.example.mobv_zadanie.data.util.SharedPrefWorker
 import com.example.mobv_zadanie.databinding.FragmentWifiRoomsBinding
 import com.example.mobv_zadanie.ui.adapters.WifiRoomsAdapter
 import com.example.mobv_zadanie.ui.adapters.WifiRoomsListener
 import com.example.mobv_zadanie.ui.viewModels.WifiRoomsViewModel
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
 
 /**
  * A simple [Fragment] subclass.
@@ -33,6 +38,7 @@ class WifiRoomsFragment : Fragment() {
 
     //helper global variable
     companion object {
+        private const val TAG = "WIFI_ROOMS"
         @SuppressLint("StaticFieldLeak")
         lateinit var wifiRoomsContext: Context
     }
@@ -102,6 +108,17 @@ class WifiRoomsFragment : Fragment() {
             saveCurrentWifiRoom()
         }
         wifiRoomsViewModel.saveCurrentWifiRoom("XsTDHS3C2YneVmEW5Ry7")
+
+        // Save actual user's fid
+        getAndPostFirebaseId()
+
+        MessagingService.token.observe(this, Observer {
+            it?.let {
+                Log.i(TAG, "Received new refreshed firebase token $it ...refreshing")
+                wifiRoomsViewModel.postFirebaseId(it)
+            }
+        })
+
         return binding.root
     }
 
@@ -115,6 +132,33 @@ class WifiRoomsFragment : Fragment() {
             println("Allowed")
             saveCurrentWifiRoom()
         }
+    }
+
+    private fun getAndPostFirebaseId() {
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG,"$task.exception getInstanceId failed")
+                    return@OnCompleteListener
+                }
+
+                // Get new Instance ID token
+                val token = task.result?.token
+
+                // Log and toast
+                val msg = getString(R.string.msg_token_fmt, token)
+                Log.d(TAG, msg)
+                Toast.makeText(this.context, msg, Toast.LENGTH_SHORT).show()
+
+                if (token != null) {
+                    wifiRoomsViewModel.postFirebaseId(token)
+                    //Toast.makeText(this.context, "Firebase id saved", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "Firebase id saved")
+                } else {
+                    //Toast.makeText(this.context, "Firebase id not found", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "Firebase id not found")
+                }
+            })
     }
 
     private fun saveCurrentWifiRoom() {

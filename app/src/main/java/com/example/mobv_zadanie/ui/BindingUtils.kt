@@ -56,7 +56,7 @@ fun bindPostGifImage(imgView: ImageView, postMessage: String?) {
         imgView.visibility  = View.VISIBLE
     } else {
         Glide.with(imgView.context).clear(imgView)
-        imgView.visibility  = View.INVISIBLE
+        imgView.visibility  = View.GONE
     }
 }
 
@@ -88,7 +88,7 @@ fun bindMessageGifImage(imgView: ImageView, messageMessage: String?) {
         imgView.visibility  = View.VISIBLE
     } else {
         Glide.with(imgView.context).clear(imgView)
-        imgView.visibility  = View.INVISIBLE
+        imgView.visibility  = View.GONE
     }
 }
 
