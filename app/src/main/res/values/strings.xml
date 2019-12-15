@@ -21,4 +21,7 @@
     <string name="register">register</string>
     <string name="navigation_header_desc">Navigation header</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_android_zadanie_default_channel</string>
+    <string name="default_notification_channel_name" translatable="false">XsTDHS3C2YneVmEW5Ry7</string>
+    <string name="fcm_message">Nová správa</string>
 </resources>

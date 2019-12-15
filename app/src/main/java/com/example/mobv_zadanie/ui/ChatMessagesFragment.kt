@@ -76,6 +76,13 @@ class ChatMessagesFragment:Fragment() {
         chatMessagesViewModel.chat.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
+                println(it)
+                val item = it.find { messageItem ->  messageItem.uid == chatMessagesViewModel.uidcontact}
+                if (item != null) {
+                    if (item.uid_fid != "") {
+                        chatMessagesViewModel.fillFid(item.uid_fid) // set contact's fid
+                    }
+                }
             }
         })
 
@@ -118,7 +125,9 @@ class ChatMessagesFragment:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         chatContext = view.context
+
         chatMessagesViewModel.chatList(args.contactId, chatContext)
+
         send.setOnClickListener{
             val message = message_text.text.toString()
             chatMessagesViewModel.sendMessage(args.contactId,message, chatContext)

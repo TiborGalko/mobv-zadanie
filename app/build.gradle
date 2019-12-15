@@ -98,4 +98,7 @@ dependencies {
 
     // Firebase cloud messaging
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
+
+    // Add the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
 }

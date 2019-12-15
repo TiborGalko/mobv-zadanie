@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import com.example.mobv_zadanie.data.*
 import com.example.mobv_zadanie.data.db.*
+import com.example.mobv_zadanie.data.firebaseapi.FcmAPI
 import com.example.mobv_zadanie.data.webapi.CallAPI
 
 object Injection {
@@ -14,7 +15,7 @@ object Injection {
 
     // Create repository with database cache and api
     private fun provideDataRepository(context: Context): DataRepository {
-        return DataRepository.getInstance(provideCache(context), CallAPI.create())
+        return DataRepository.getInstance(provideCache(context), CallAPI.create(), FcmAPI.create())
     }
 
     fun provideViewModelFactory(context: Context): ViewModelProvider.Factory {

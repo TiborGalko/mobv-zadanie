@@ -110,12 +110,7 @@ class WifiRoomsFragment : Fragment() {
         wifiRoomsViewModel.saveCurrentWifiRoom("XsTDHS3C2YneVmEW5Ry7")
 
         // Save actual user's fid
-        val fid = getFirebaseId()
-        if (fid != "") {
-            wifiRoomsViewModel.postFirebaseId(fid)
-        } else {
-            Toast.makeText(this.context, "Firebase id not found", Toast.LENGTH_SHORT).show()
-        }
+        getAndPostFirebaseId()
 
         MessagingService.token.observe(this, Observer {
             it?.let {
@@ -139,8 +134,7 @@ class WifiRoomsFragment : Fragment() {
         }
     }
 
-    private fun getFirebaseId(): String {
-        var fid = ""
+    private fun getAndPostFirebaseId() {
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -157,10 +151,14 @@ class WifiRoomsFragment : Fragment() {
                 Toast.makeText(this.context, msg, Toast.LENGTH_SHORT).show()
 
                 if (token != null) {
-                    fid = token
+                    wifiRoomsViewModel.postFirebaseId(token)
+                    //Toast.makeText(this.context, "Firebase id saved", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "Firebase id saved")
+                } else {
+                    //Toast.makeText(this.context, "Firebase id not found", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "Firebase id not found")
                 }
             })
-        return fid
     }
 
     private fun saveCurrentWifiRoom() {

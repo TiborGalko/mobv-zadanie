@@ -1,8 +1,11 @@
 package com.example.mobv_zadanie.ui
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
@@ -21,6 +24,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            val channelId = getString(R.string.default_notification_channel_id)
+            val channelName = getString(R.string.default_notification_channel_name)
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager?.createNotificationChannel(NotificationChannel(channelId,
+                channelName, NotificationManager.IMPORTANCE_LOW)
+            )
+        }
 
         Log.i("TAG_API", "main activity called")
 
