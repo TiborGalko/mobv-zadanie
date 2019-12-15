@@ -84,7 +84,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/time"
             app:layout_constraintVertical_bias="0.423"
-            app:postMessage="@{post}"/>
+            app:postMessage="@{post}"
+            android:textIsSelectable="true"/>
 
         <ImageView
             android:id="@+id/imageView"
